@@ -7,9 +7,10 @@
 <body>
     <p id="displayNumber"></p>
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const number = urlParams.get('number');
-        document.getElementById('displayNumber').textContent = `The number you entered is: ${number}`;
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const storedNumber = localStorage.getItem('storedNumber');
+            document.getElementById('displayNumber').textContent = `The number you entered is: ${storedNumber}`;
+        });
     </script>
 </body>
 </html>
