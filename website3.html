@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The Best Search Engine</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: top;
+            align-items: center;
+            width: 170%;
+            flex-direction: column;
+            background-image: url('https://imgs.search.brave.com/FwrwbbUx5WeNrDucz2ioGuu7s-pYMHsokegvnGfUAyM/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA0LzA2LzkwLzQz/LzM2MF9GXzQwNjkw/NDM3OV9idnhPRDhw/ZE5takwwdWg1ZWxw/SkNMQmx3cFJkdEl0/Sy5qcGc');
+            background-repeat: repeat;
+            background-size: cover;
+			background-attachment: fixed;
+        }
+		#image {
+            position: sticky;
+			top: 0;
+        }
+        #textbox {
+            margin-bottom:  10px;
+        }
+        table {
+		  
+          border-collapse: separate;
+          border-spacing: 5px;
+		  text-align: center; 
+		  vertical-align: middle;
+		  background: src("https://imgs.search.brave.com/FwrwbbUx5WeNrDucz2ioGuu7s-pYMHsokegvnGfUAyM/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA0LzA2LzkwLzQz/LzM2MF9GXzQwNjkw/NDM3OV9idnhPRDhw/ZE5takwwdWg1ZWxw/SkNMQmx3cFJkdEl0/Sy5qcGc'");
+		  background-size: cover;
+        }
+
+        td {
+          border: none;
+          padding: 20px;
+          box-sizing: border-box;
+        }
+        #textbox {
+			position: sticky;
+			top: 0;
+            width: 500px; /* Set the width of the text box */
+            height: 20px; /* Set the height of the text box */
+            padding: 10px; /* Add some padding around the text inside the text box */
+            font-size: 18px; /* Increase the font size of the text inside the text box */
+            opacity: 0.5; /* Opacity*/
+            border-radius: 25px;
+            }
+        
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        var recentTexts = [];
+
+        function updateLinks() {
+            var textBoxValue = document.getElementById('textbox').value;
+            document.getElementById('google').href = 'https://www.google.com/search?q=' + textBoxValue + '';
+
+
+            document.getElementById('youtube').href = 'https://www.youtube.com/results?search_query=' + textBoxValue + '';
+
+
+            document.getElementById('duckduckgo').href = 'https://duckduckgo.com/?t=h_&q=' + textBoxValue + '';
+
+
+            document.getElementById('bing').href = 'https://www.bing.com/search?q=' + textBoxValue + '';
+
+
+            document.getElementById('ask').href = 'https://www.ask.com/web?q=' + textBoxValue + '';
+
+
+            document.getElementById('brave').href = 'https://search.brave.com/search?q=' + textBoxValue + '';
+
+            
+            document.getElementById('phind').href = 'https://www.phind.com/search?q=' + textBoxValue + '&ignoreSearchResults=false';
+
+            
+            document.getElementById('you').href = 'https://you.com/search?q=hello' + textBoxValue + '&ignoreSearchResults=false';
+
+
+        }
+
+        function storeRecentText() {
+    var textbox = document.getElementById("textbox");
+    var recentTextsList = document.getElementById("recentTexts");
+    
+    // Store the new text
+    recentTexts.unshift(textbox.value);
+    
+    // Keep only the last five texts
+    recentTexts = recentTexts.slice(0,   5);
+    
+    // Update the list
+    recentTextsList.innerHTML = '';
+    recentTexts.forEach(function(text, index) {
+        var li = document.createElement('li');
+        li.textContent = text;
+        li.setAttribute('data-index', index);
+        li.onclick = function() {
+            textbox.value = text;
+        };
+        recentTextsList.appendChild(li);
+    });
+    
+    // Clear the textbox
+    
+}
+
+// Event delegation for dynamically added list items
+document.addEventListener('click', function(event) {
+  if (event.target && event.target.matches('li')) {
+    var textbox = document.getElementById("textbox");
+    textbox.value = event.target.textContent;
+  }
+});
+    </script>
+</head>
+<body>
+
+	<table style="position: fixed;top: 20px; right: 10%" id="table" src="https://imgs.search.brave.com/FwrwbbUx5WeNrDucz2ioGuu7s-pYMHsokegvnGfUAyM/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA0LzA2LzkwLzQz/LzM2MF9GXzQwNjkw/NDM3OV9idnhPRDhw/ZE5takwwdWg1ZWxw/SkNMQmx3cFJkdEl0/Sy5qcGc'">
+	<tr><td>    <img src="https://media.discordapp.net/attachments/849960724074594344/1213102056089591868/tbselogo.webp?ex=65f44054&is=65e1cb54&hm=0114561eb5e62e55d327fba08b8fd940dd1f8fe3aee35e2017c67c84c979a6f1&=&format=webp" style="height: 300xp; width: auto;" alt="The Best Search Engine" id = "image">
+</td></tr>
+	<tr><td>    <input type="text" id="textbox" onkeyup="updateLinks()" onkeydown="if (event.keyCode ==  13) { storeRecentText(); }" placeholder="Search."/><ul id="recentTexts">
+</td></tr>
+
+	</table>
+	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    
+    <table><tr>
+    <td><a id="google" target="_blank"><img src="https://imgs.search.brave.com/SC6dbPCDxOX_PnvBnC_XKc9HEVy_v9lkaodJOgeOYHQ/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9hc3Nl/dHMuc3RpY2twbmcu/Y29tL2ltYWdlcy81/ODBiNTdmY2Q5OTk2/ZTI0YmM0M2M1MWYu/cG5n" width="90" height="40" alt="Google"></a></td>
+    
+    <td><a id="youtube" target="_blank"><img src="https://imgs.search.brave.com/ETeTqK5OVGl8GX-LzAZCTNNzMxmCCUG3BdXRtTIWk4c/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMuY2RubG9nby5j/b20vbG9nb3MveS85/NC95b3V0dWJlLnBu/Zw" width="100" height="90" alt="Youtube"></a></td>
+    
+    <td><a id="duckduckgo" target="_blank"><img src="https://imgs.search.brave.com/Uc8ZLIWjcjZxnSs53Ogb4mtpYjmCMnWUY7XguqpO9EI/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9sb2dv/cy13b3JsZC5uZXQv/d3AtY29udGVudC91/cGxvYWRzLzIwMjIv/MDQvRHVja0R1Y2tH/by1TeW1ib2wtNzAw/eDM5NC5wbmc" width="100" height="50" alt="duckduckgo"></a></td>
+    
+    <td><a id="bing" target="_blank"><img src="https://imgs.search.brave.com/uMXaU_EB1WT2p0UmvhfoQNWG-fxhsngf9hmtDGOGwpg/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9hc3Nl/dHMuc3RpY2twbmcu/Y29tL2ltYWdlcy82/MjNhZmIwZDI3ZDQ5/NDZhY2VhZTJmYWEu/cG5n" width="100" height="50" alt="bing"></a></td>
+    
+    
+    <td><a id="ask" target="_blank"><img src="https://www.ask.com/wp-content/themes/ask-2022/assets/images/site-logo.svg" width="100" height="50" alt="ask"></a></td>
+    
+    <td><a id="brave" target="_blank"><img src="https://cdn.search.brave.com/serp/v2/_app/immutable/assets/brave-logo-light.FAaOVUJt.svg" width="100" height="50" alt="brave"></a></td>
+    
+    <td> <a id="phind" target="_blank"><img src="https://www.phind.com/images/phind_v2.svg" width="100" height="50" alt="phind"></a></td>
+    
+    <td><a id="you" target="_blank"><img src="https://cdn.you.com/img/shared/logos/ydc-logo.svg" width="100" height="50" alt="you"></a></td>
+    </tr>
+    </table>
+<marquee><p style="font-size: 2px;">hi</p></marquee>
+</body>
+</html>
