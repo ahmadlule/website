@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Google Sheets Data Display</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.2/tabletop.min.js"></script>
+</head>
+<body>
+    <div id="data"></div>
+
+    <script>
+        function init() {
+            Tabletop.init({
+                key: '1yLmvzscqQVZXg3Ars1llNm3aLoijoKytJtj6yCz9YB0',
+                callback: showInfo,
+                simpleSheet: true
+            });
+        }
+
+        function showInfo(data, tabletop) {
+            document.getElementById('data').innerHTML = data[0].name; // Assuming 'name' is the column name for the first cell
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
