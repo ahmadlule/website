@@ -5,16 +5,16 @@
       google.load('visualization', '1', {packages: ['corechart']});
       google.setOnLoadCallback(drawChart);
 
-      function drawChart() {
-        var spreadsheetUrl = "https://script.google.com/u/0/home/projects/1jrXMwEfG2Ff98pW08pijh47UEpMR_nEWq4b08hnuiqXE9tNuz0zuN0WL/edit?range=A1";
-        var query = new google.visualization.Query(spreadsheetUrl);
-        query.send(handleQueryResponse);
-      }
+      function getData(){
+ var spreadSheetId = "1yLmvzscqQVZXg3Ars1llNm3aLoijoKytJtj6yCz9YB0"; // Replace with your Spreadsheet ID
+ var dataRange = "Sheet1!A1"; // Adjust the sheet name and range as needed
+ 
+ var range = Sheets.Spreadsheets.Values.get(spreadSheetId, dataRange);
+ var values = range.values;
+ 
+ return values[0][0]; // Return the first cell value
+}
 
-      function handleQueryResponse(response) {
-        var dataTable = response.getDataTable();
-        document.getElementById("display").innerHTML = dataTable.getValue(0, 0);
-      }
     </script>
  </head>
  <body>
