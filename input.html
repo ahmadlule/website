@@ -5,9 +5,13 @@
     <title>Input Website</title>
 </head>
 <body>
-    <form action="https://ahmadlule.github.io/website/output" method="get">
-        <input type="text" name="number" placeholder="Enter a number">
-        <button type="submit">Submit</button>
-    </form>
+    <input type="text" id="numberInput" placeholder="Enter a number">
+    <button onclick="storeNumber()">Submit</button>
+    <script>
+        function storeNumber() {
+            const number = document.getElementById('numberInput').value;
+            localStorage.setItem('storedNumber', number);
+        }
+    </script>
 </body>
 </html>
