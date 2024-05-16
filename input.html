@@ -1,57 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Update Google Sheets</title>
-    <script src="https://apis.google.com/js/api.js"></script>
-    <script>
-        function updateSheet() {
-            const spreadsheetId = '1yLmvzscqQVZXg3Ars1llNm3aLoijoKytJtj6yCz9YB0';
-            const range = 'Sheet1!A1:A3';
-            const values = [
-                [document.getElementById('input1').value],
-                [document.getElementById('input2').value],
-                [document.getElementById('input3').value]
-            ];
-            const body = {
-                values: values
-            };
-            gapi.client.sheets.spreadsheets.values.update({
-                spreadsheetId: spreadsheetId,
-                range: range,
-                valueInputOption: 'RAW',
-                resource: body
-            }).then((response) => {
-                console.log(`${response.result.updatedCells} cells updated.`);
-            }, (reason) => {
-                console.error('Error: ' + reason.result.error.message);
-            });
-        }
-
-        function handleClientLoad() {
-            gapi.load('client', initClient);
-        }
-
-        function initClient() {
-            gapi.client.init({
-                apiKey: 'AIzaSyDmK7tgvTArAf7in7NC4Pj4DJKPPxbSYbM',
-                clientId: '340228555137-blu7p5sarf0k46js47u9a5o8j4ljk9ng.apps.googleusercontent.com',
-                discoveryDocs: ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
-                scope: 'https://www.googleapis.com/auth/spreadsheets'
-            }).then(() => {
-                document.getElementById('updateButton').disabled = false;
-            });
-        }
-    </script>
-    <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()" onreadystatechange="if (this.readyState === 'complete') this.onload()">
-    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech to Text</title>
 </head>
 <body>
-    <input type="text" id="input1" placeholder="Enter value for A1">
-    <input type="text" id="input2" placeholder="Enter value for A2">
-    <input type="text" id="input3" placeholder="Enter value for A3">
-    <button id="updateButton" onclick="updateSheet()" disabled>Submit Values</button>
+    <h1>Speak and See!</h1>
+    <button id="speakButton">Speak</button>
+    <br>
+    <textarea id="transcript" rows="5" cols="30" readonly></textarea>
+
     <script>
-        document.getElementById('updateButton').disabled = false;
+        const speakButton = document.getElementById('speakButton');
+        const transcriptArea = document.getElementById('transcript');
+
+        speakButton.addEventListener('click', () => {
+            if (window.SpeechRecognition || window.webkitSpeechRecognition) {
+                const recognition = new SpeechRecognition();
+
+                recognition.start();
+
+                recognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript;
+                    transcriptArea.value = transcript;
+                };
+
+                recognition.onerror = (event) => {
+                    console.error(event.error);
+                };
+            } else {
+                alert('Speech recognition is not supported on your browser.');
+            }
+        });
+		recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    console.log(transcript); // Added for debugging
+    transcriptArea.value = transcript;
+};
     </script>
 </body>
 </html>
