@@ -51,8 +51,26 @@
   width: 800px; /* Set a fixed width */
   padding: 10px;
   margin: 0 auto; /* Center the container */
-  overflow-y: hidden; /* Add this property */
-  scroll-snap-type: x mandatory; /* Add this property for smooth scrolling */
+  border-radius: 10px; /* Add rounded borders */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+}
+
+/* Add semi-transparent scroll box */
+.scroll-container::-webkit-scrollbar {
+  width: 10px; /* Set the width of the scroll box */
+  height: 10px;
+  background-color: rgba(255, 255, 255, 0.3); /* Semi-transparent white */
+  border-radius: 10px; /* Add rounded borders to the scroll box */
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  border-radius: 10px; /* Add rounded borders to the scroll thumb */
+}
+
+.scroll-container::-webkit-scrollbar-track {
+  background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent white */
+  border-radius: 10px; /* Add rounded borders to the scroll track */
 }
 
 .scroll-container img {
@@ -138,6 +156,14 @@ document.addEventListener('click', function(event) {
     textbox.value = event.target.textContent;
   }
 });
+const scrollContainer = document.getElementById('scroll-container');
+
+scrollContainer.addEventListener('wheel', (event) => {
+  if (event.deltaY !== 0) {
+    event.preventDefault();
+    scrollContainer.scrollLeft += event.deltaX;
+  }
+});
     </script>
 </head>
 <body>
@@ -171,7 +197,7 @@ document.addEventListener('click', function(event) {
     </tr>
     </table>
 	-->
-<div class="scroll-container">
+<div class="scroll-container" id="scroll-container">
 <a id="google" target="_blank"><img src="https://imgs.search.brave.com/SC6dbPCDxOX_PnvBnC_XKc9HEVy_v9lkaodJOgeOYHQ/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9hc3Nl/dHMuc3RpY2twbmcu/Y29tL2ltYWdlcy81/ODBiNTdmY2Q5OTk2/ZTI0YmM0M2M1MWYu/cG5n" width="90" height="40" alt="Google"></a>
     <a id="youtube" target="_blank"><img src="https://imgs.search.brave.com/ETeTqK5OVGl8GX-LzAZCTNNzMxmCCUG3BdXRtTIWk4c/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMuY2RubG9nby5j/b20vbG9nb3MveS85/NC95b3V0dWJlLnBu/Zw" width="100" height="90" alt="Youtube"></a>
     <a id="duckduckgo" target="_blank"><img src="https://imgs.search.brave.com/Uc8ZLIWjcjZxnSs53Ogb4mtpYjmCMnWUY7XguqpO9EI/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9sb2dv/cy13b3JsZC5uZXQv/d3AtY29udGVudC91/cGxvYWRzLzIwMjIv/MDQvRHVja0R1Y2tH/by1TeW1ib2wtNzAw/eDM5NC5wbmc" width="100" height="50" alt="duckduckgo"></a>
