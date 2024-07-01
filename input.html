@@ -45,11 +45,15 @@
             border-radius: 25px;
             }
 .scroll-container {
-  	background-color: rgba(255,255,255,0.6)
-  	overflow-x: auto;
-  	white-space: nowrap;
-  	padding: 10px;
-	}
+  background-color: #333;
+  overflow-x: auto;
+  white-space: nowrap;
+  width: 800px; /* Set a fixed width */
+  padding: 10px;
+  margin: 0 auto; /* Center the container */
+  overflow-y: hidden; /* Add this property */
+  scroll-snap-type: x mandatory; /* Add this property for smooth scrolling */
+}
 
 .scroll-container img {
   padding: 10px;
@@ -64,26 +68,39 @@
             var textBoxValue = document.getElementById('textbox').value;
             document.getElementById('google').href = 'https://www.google.com/search?q=' + textBoxValue + '';
 
-
             document.getElementById('youtube').href = 'https://www.youtube.com/results?search_query=' + textBoxValue + '';
-
 
             document.getElementById('duckduckgo').href = 'https://duckduckgo.com/?t=h_&q=' + textBoxValue + '';
 
-
             document.getElementById('bing').href = 'https://www.bing.com/search?q=' + textBoxValue + '';
-
 
             document.getElementById('ask').href = 'https://www.ask.com/web?q=' + textBoxValue + '';
 
-
             document.getElementById('brave').href = 'https://search.brave.com/search?q=' + textBoxValue + '';
-
             
             document.getElementById('phind').href = 'https://www.phind.com/search?q=' + textBoxValue + '&ignoreSearchResults=false';
-
             
-            document.getElementById('you').href = 'https://you.com/search?q=hello' + textBoxValue + '&ignoreSearchResults=false';
+            document.getElementById('you').href = 'https://you.com/search?q=' + textBoxValue + '&ignoreSearchResults=false';
+            
+            document.getElementById('tiktok').href = 'https://www.tiktok.com/search?lang=en&q=' + textBoxValue + '';
+		
+            document.getElementById('reddit').href = 'https://www.reddit.com/search/?q=' + textBoxValue + '';
+		
+            document.getElementById('tele').href = 'https://teleteg.com/search-results/?query=' + textBoxValue + '&filters=groups';
+		
+            document.getElementById('wiki').href = 'https://en.wikipedia.org/wiki/' + textBoxValue + '';
+		
+            document.getElementById('linkedin').href = 'https://www.linkedin.com/learning/search?keywords=' + textBoxValue + '';
+		
+            document.getElementById('threads').href = 'https://www.threads.net/search?q=' + textBoxValue + '';
+		
+            document.getElementById('yahoo').href = 'https://search.yahoo.com/search?p=' + textBoxValue + '';
+		
+            document.getElementById('archive').href = 'https://archive.org/search?query=' + textBoxValue + '';
+		
+            document.getElementById('yep').href = 'https://yep.com/web?q=' + textBoxValue + '';
+		
+            document.getElementById('openverse').href = 'https://openverse.org/search/?q=' + textBoxValue + '';
 
 
         }
@@ -163,6 +180,16 @@ document.addEventListener('click', function(event) {
     <a id="brave" target="_blank"><img src="https://cdn.search.brave.com/serp/v2/_app/immutable/assets/brave-logo-light.FAaOVUJt.svg" width="100" height="50" alt="brave"></a>
     <a id="phind" target="_blank"><img src="https://www.phind.com/images/phind_v2.svg" width="100" height="50" alt="phind"></a>
     <a id="you" target="_blank"><img src="https://cdn.you.com/img/shared/logos/ydc-logo.svg" width="100" height="50" alt="you"></a>
+    <a id="tiktok" target="_blank"><img src="https://cdn.you.com/img/shared/logos/ydc-logo.svg" width="100" height="50" alt="tiktok"></a>
+    <a id="reddit" target="_blank"><img src="https://cdn.you.com/img/shared/logos/ydc-logo.svg" width="100" height="50" alt="reddit"></a>
+    <a id="tele" target="_blank"><img src="https://cdn.you.com/img/shared/logos/ydc-logo.svg" width="100" height="50" alt="tele"></a>
+    <a id="wiki" target="_blank"><img src="https://cdn.you.com/img/shared/logos/ydc-logo.svg" width="100" height="50" alt="wiki"></a>
+    <a id="linkedin" target="_blank"><img src="https://cdn.you.com/img/shared/logos/ydc-logo.svg" width="100" height="50" alt="linkedin"></a>
+    <a id="threads" target="_blank"><img src="https://cdn.you.com/img/shared/logos/ydc-logo.svg" width="100" height="50" alt="threads"></a>
+    <a id="yahoo" target="_blank"><img src="https://cdn.you.com/img/shared/logos/ydc-logo.svg" width="100" height="50" alt="yahoo"></a>
+    <a id="archive" target="_blank"><img src="https://cdn.you.com/img/shared/logos/ydc-logo.svg" width="100" height="50" alt="archive"></a>
+    <a id="yep" target="_blank"><img src="https://cdn.you.com/img/shared/logos/ydc-logo.svg" width="100" height="50" alt="yep"></a>
+    <a id="openverse" target="_blank"><img src="https://cdn.you.com/img/shared/logos/ydc-logo.svg" width="100" height="50" alt="openverse"></a>
   <!-- Add more images with links here -->
 </div>
 	
