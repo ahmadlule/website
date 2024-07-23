@@ -1,9 +1,9 @@
 javascript:(function(){
     var rect = document.createElement('div');
     rect.style.position = 'fixed';
-    rect.style.top = '50%';
+    rect.style.top = '96%';
     rect.style.left = '50%';
-    rect.style.transform = 'translate(-10%, -90%)';
+    rect.style.transform = 'translate(-1%, -80%)';
     rect.style.background = 'white';
     rect.style.border = '1px solid black';
     rect.style.padding = '10px';
