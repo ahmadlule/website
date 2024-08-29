@@ -54,7 +54,8 @@
   margin: 0 auto; /* Center the container */
   border-radius: 10px; /* Add rounded borders */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
-  
+  box-shadow: 12px 12px 12px rgba(0,0,0,0.1),
+  -10px -10px 10px rgba(255,255,255,0.5);
 }
 
 /* Add semi-transparent scroll box */
@@ -76,8 +77,8 @@
 }
 
 .scroll-container:hover{
-  box-shadow: 12px 12px 12px rgba(0,0,0,0.1),
-  -10px -10px 10px white;
+  box-shadow: 12px 12px 12px rgba(0,0,0,0.1) inset,
+  -10px -10px 10px rgba(255,255,255,0,5) inset;
 }
 
 .scroll-container img {
