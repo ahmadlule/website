@@ -46,13 +46,15 @@
             }
 .scroll-container {
   background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+  backdrop-filter: blur(10px);
   overflow-x: auto;
   white-space: nowrap;
-  width: 70%; /* Set a fixed width */
+  width: clamp(50%,70%,90%); /* Set a fixed width */
   padding: 10px;
   margin: 0 auto; /* Center the container */
   border-radius: 10px; /* Add rounded borders */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+  
 }
 
 /* Add semi-transparent scroll box */
@@ -71,6 +73,11 @@
 .scroll-container::-webkit-scrollbar-track {
   background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent white */
   border-radius: 10px; /* Add rounded borders to the scroll track */
+}
+
+.scroll-container:hover{
+  box-shadow: 12px 12px 12px rgba(0,0,0,0.1),
+  -10px -10px 10px white;
 }
 
 .scroll-container img {
