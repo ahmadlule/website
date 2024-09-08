@@ -150,6 +150,7 @@
     recentTextsList.innerHTML = '';
     recentTexts.forEach(function(text, index) {
         var li = document.createElement('li');
+	var li = document.createElement('br');
         li.textContent = text;
         li.setAttribute('data-index', index);
         li.onclick = function() {
