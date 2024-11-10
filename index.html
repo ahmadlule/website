@@ -149,17 +149,18 @@ ul {
 				
             document.getElementById('perplexity').href =  'https://www.perplexity.ai/search?q=' + textBoxValue + '';
         }
-// Main initialization function
+
+
+
+	    
 function initializeApp() {
     const textbox = document.getElementById("textbox");
     const recentTextsList = document.getElementById("recentTexts");
     const scrollContainer = document.getElementById('scroll-container');
     const resultElement = document.getElementById('result') || createResultElement();
 
-    // Initialize recent texts list
     updateRecentTextsList();
 
-    // Event listeners
     if (textbox) {
         textbox.addEventListener('keyup', updateLinks);
         textbox.addEventListener('keydown', handleTextboxKeydown);
@@ -169,10 +170,6 @@ function initializeApp() {
         scrollContainer.addEventListener('wheel', handleScrollContainerWheel);
     }
 
-    // Handle clicks on the document
-    document.addEventListener('click', handleDocumentClick);
-
-    // Check for URL parameters and pre-fill the search box
     handleUrlParameters();
 }
 
@@ -185,7 +182,7 @@ function createResultElement() {
 
 function handleTextboxKeydown(event) {
     if (event.key === 'Enter') {
-        event.preventDefault(); // Prevent form submission if within a form
+        event.preventDefault();
         storeRecentText();
         handleBangSearch(this.value);
     }
@@ -198,25 +195,11 @@ function handleScrollContainerWheel(event) {
     }
 }
 
-function handleDocumentClick(event) {
-    // Log clicked element for debugging
-    console.log('Clicked element:', event.target);
-
-    if (event.target.tagName === 'A') {
-        console.log('Link clicked:', event.target.href);
-        // Your link handling code here, if needed
-    } else if (event.target.matches('li[data-index]')) {
-        const textbox = document.getElementById("textbox");
-        textbox.value = event.target.textContent;
-        updateLinks();
-    }
-}
-
 function storeRecentText() {
     const textbox = document.getElementById("textbox");
     if (textbox.value.trim() !== '') {
         recentTexts.unshift(textbox.value);
-        recentTexts = recentTexts.slice(0, 5); // Keep only the last five texts
+        recentTexts = recentTexts.slice(0, 5);
         updateRecentTextsList();
     }
 }
@@ -229,6 +212,10 @@ function updateRecentTextsList() {
             const li = document.createElement('li');
             li.textContent = text;
             li.setAttribute('data-index', index);
+            li.onclick = function() {
+                document.getElementById("textbox").value = text;
+                updateLinks();
+            };
             recentTextsList.appendChild(li);
         });
     }
@@ -236,7 +223,6 @@ function updateRecentTextsList() {
 
 function handleBangSearch(input) {
     const resultElement = document.getElementById('result') || createResultElement();
-    
     if (input.startsWith('!')) {
         const [bang, ...searchTerms] = input.split(' ');
         const searchTerm = searchTerms.join(' ');
@@ -244,11 +230,6 @@ function handleBangSearch(input) {
     } else {
         resultElement.textContent = `Regular search for "${input}"`;
     }
-}
-
-function updateLinks() {
-    // Implement this function based on your specific requirements
-    console.log("updateLinks function called");
 }
 
 function handleUrlParameters() {
@@ -264,16 +245,9 @@ function handleUrlParameters() {
     }
 }
 
-// Run initialization when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', initializeApp);
 
-// Ensure links are clickable
-document.addEventListener('click', function(e) {
-    if (e.target.tagName === 'A') {
-        // This will allow the default link behavior
-        return true;
-    }
-});
+	    
 	    
     </script>
 </head>
