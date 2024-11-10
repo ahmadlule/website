@@ -139,7 +139,8 @@ ul {
 
         }
 
-        function storeRecentText() {
+        
+function storeRecentText() {
     var textbox = document.getElementById("textbox");
     var recentTextsList = document.getElementById("recentTexts");
     
@@ -147,7 +148,7 @@ ul {
     recentTexts.unshift(textbox.value);
     
     // Keep only the last five texts
-    recentTexts = recentTexts.slice(0,   5);
+    recentTexts = recentTexts.slice(0, 5);
     
     // Update the list
     recentTextsList.innerHTML = '';
@@ -161,55 +162,9 @@ ul {
         recentTextsList.appendChild(li);
     });
     
-    // Clear the textbox
-    
+    // Don't clear the textbox here
 }
 
-// Event delegation for dynamically added list items
-document.addEventListener('click', function(event) {
-  if (event.target && event.target.matches('li')) {
-    var textbox = document.getElementById("textbox");
-    textbox.value = event.target.textContent;
-  }
-});
-const scrollContainer = document.getElementById('scroll-container');
-
-scrollContainer.addEventListener('wheel', (event) => {
-  if (event.deltaY !== 0) {
-    event.preventDefault();
-    scrollContainer.scrollLeft += event.deltaX;
-  }
-});
-
-function handleSearch() {
-    const input = document.getElementById('searchInput').value;
-    const resultElement = document.getElementById('result');
-    
-    if (input.startsWith('!')) {
-        const [bang, ...searchTerms] = input.split(' ');
-        const searchTerm = searchTerms.join(' ');
-        resultElement.textContent = `Searching with ${bang} for "${searchTerm}"`;
-    } else {
-        resultElement.textContent = `Regular search for "${input}"`;
-    }
-}
-
-// Handle Enter key press
-document.getElementById('searchInput').addEventListener('keypress', function(event) {
-    if (event.key === 'Enter') {
-        handleSearch();
-    }
-});
-
-// Check for URL parameters and pre-fill the search box
-window.onload = function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const query = urlParams.get('q');
-    if (query) {
-        document.getElementById('searchInput').value = query;
-        handleSearch();
-    }
-};
 function handleBangSearch(input) {
     const resultElement = document.getElementById('result');
     if (!resultElement) {
@@ -227,25 +182,53 @@ function handleBangSearch(input) {
     }
 }
 
-// Modified event listener for the text box
-document.getElementById('textbox').addEventListener('keydown', function(event) {
-    if (event.keyCode == 13) {
-        storeRecentText();
-        handleBangSearch(this.value);
-    }
-});
+function updateLinks() {
+    // Implement this function if it's not already defined elsewhere
+    console.log("updateLinks function called");
+}
 
-// Check for URL parameters and pre-fill the search box
-window.onload = function() {
+// Event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    const textbox = document.getElementById("textbox");
+    const scrollContainer = document.getElementById('scroll-container');
+
+    // Event delegation for dynamically added list items
+    document.addEventListener('click', function(event) {
+        if (event.target && event.target.matches('li')) {
+            textbox.value = event.target.textContent;
+        }
+    });
+
+    // Scroll container event
+    if (scrollContainer) {
+        scrollContainer.addEventListener('wheel', (event) => {
+            if (event.deltaY !== 0) {
+                event.preventDefault();
+                scrollContainer.scrollLeft += event.deltaX;
+            }
+        });
+    }
+
+    // Textbox event listeners
+    if (textbox) {
+        textbox.addEventListener('keyup', updateLinks);
+        textbox.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                storeRecentText();
+                handleBangSearch(this.value);
+            }
+        });
+    }
+
+    // Check for URL parameters and pre-fill the search box
     const urlParams = new URLSearchParams(window.location.search);
     const query = urlParams.get('q');
-    if (query) {
-        const textbox = document.getElementById('textbox');
+    if (query && textbox) {
         textbox.value = query;
-        updateLinks(); // Call your existing function
+        updateLinks();
         handleBangSearch(query);
     }
-};
+});
     </script>
 </head>
 <body>
