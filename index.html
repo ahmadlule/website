@@ -152,12 +152,11 @@ ul {
 
 
 
-	    
+	
 function initializeApp() {
     const textbox = document.getElementById("textbox");
     const recentTextsList = document.getElementById("recentTexts");
     const scrollContainer = document.getElementById('scroll-container');
-    const resultElement = document.getElementById('result') || createResultElement();
 
     updateRecentTextsList();
 
@@ -173,18 +172,11 @@ function initializeApp() {
     handleUrlParameters();
 }
 
-function createResultElement() {
-    const resultElement = document.createElement('p');
-    resultElement.id = 'result';
-    document.body.appendChild(resultElement);
-    return resultElement;
-}
-
 function handleTextboxKeydown(event) {
     if (event.key === 'Enter') {
         event.preventDefault();
         storeRecentText();
-        handleBangSearch(this.value);
+        handleBangSearch(event.target.value);
     }
 }
 
@@ -198,9 +190,11 @@ function handleScrollContainerWheel(event) {
 function storeRecentText() {
     const textbox = document.getElementById("textbox");
     if (textbox.value.trim() !== '') {
-        recentTexts.unshift(textbox.value);
-        recentTexts = recentTexts.slice(0, 5);
-        updateRecentTextsList();
+        if (!recentTexts.includes(textbox.value)) {
+            recentTexts.unshift(textbox.value);
+            recentTexts = recentTexts.slice(0, 5);
+            updateRecentTextsList();
+        }
     }
 }
 
@@ -222,13 +216,12 @@ function updateRecentTextsList() {
 }
 
 function handleBangSearch(input) {
-    const resultElement = document.getElementById('result') || createResultElement();
     if (input.startsWith('!')) {
         const [bang, ...searchTerms] = input.split(' ');
         const searchTerm = searchTerms.join(' ');
-        resultElement.textContent = `Searching with ${bang} for "${searchTerm}"`;
+        console.log(`Searching with ${bang} for "${searchTerm}"`);
     } else {
-        resultElement.textContent = `Regular search for "${input}"`;
+        console.log(`Regular search for "${input}"`);
     }
 }
 
@@ -255,7 +248,7 @@ document.addEventListener('DOMContentLoaded', initializeApp);
 <table id="table" src="https://imgs.search.brave.com/FwrwbbUx5WeNrDucz2ioGuu7s-pYMHsokegvnGfUAyM/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA0LzA2LzkwLzQz/LzM2MF9GXzQwNjkw/NDM3OV9idnhPRDhw/ZE5takwwdWg1ZWxw/SkNMQmx3cFJkdEl0/Sy5qcGc'">
 	<tr><td>    <img src="abc/tbselogo.webp" style="height: 300xp; width: auto;" alt="The Best Search Engine" id = "image" href="https://ahmadlule.github.io/website/" >
 </td></tr>
-	<tr><td>    <input type="text" id="textbox" onkeyup="updateLinks()" onkeydown="if (event.keyCode ==  13) { storeRecentText(); }" placeholder="Search."/><ul id="recentTexts">
+	<tr><td>    <input type="text" id="textbox" onkeyup="updateLinks()" placeholder="Search."/><ul id="recentTexts">
 </td></tr>
 
 	</table>
