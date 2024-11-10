@@ -176,20 +176,20 @@ function storeRecentText() {
 }
 
 function handleBangSearch(input) {
-    const resultElement = document.getElementById('result');
-    if (!resultElement) {
-        resultElement = document.createElement('p');
-        resultElement.id = 'result';
-        document.body.appendChild(resultElement);
-    }
-    
-    if (input.startsWith('!')) {
-        const [bang, ...searchTerms] = input.split(' ');
-        const searchTerm = searchTerms.join(' ');
-        resultElement.textContent = `Searching with ${bang} for "${searchTerm}"`;
-    } else {
-        resultElement.textContent = `Regular search for "${input}"`;
-    }
+  let resultElement = document.getElementById('result');
+  if (!resultElement) {
+    resultElement = document.createElement('p');
+    resultElement.id = 'result';
+    document.body.appendChild(resultElement);
+  }
+  
+  if (input.startsWith('!')) {
+    const [bang, ...searchTerms] = input.split(' ');
+    const searchTerm = searchTerms.join(' ');
+    resultElement.textContent = `Searching with ${bang} for "${searchTerm}"`;
+  } else {
+    resultElement.textContent = `Regular search for "${input}"`;
+  }
 }
 
 function updateLinks() {
