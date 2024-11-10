@@ -1,22 +1,85 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <base target="_top">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bang Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        input[type="text"] {
+            width: 300px;
+            padding: 0.5rem;
+            font-size: 1rem;
+            margin-right: 0.5rem;
+        }
+        button {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <form>
-        <input type="range" id="slider1" name="slider1" min="0" max="255" value="0" onchange="updateCellValue()">
-        <input type="range" id="slider2" name="slider2" min="0" max="255" value="0" onchange="updateCellValue()">
-        <input type="range" id="slider3" name="slider3" min="0" max="255" value="0" onchange="updateCellValue()">
-    </form>
+    <div class="container">
+        <h1>Bang Search</h1>
+        <input type="text" id="searchInput" placeholder="Enter your search">
+        <button onclick="handleSearch()">Search</button>
+        <p id="result"></p>
+    </div>
 
     <script>
-        function updateCellValue() {
-            var value1 = document.getElementById('slider1').value;
-            var value2 = document.getElementById('slider2').value;
-            var value3 = document.getElementById('slider3').value;
-            google.script.run.updateCellValue(value1 + ',' + value2 + ',' + value3,a);//add ,a
+        function handleSearch() {
+            const input = document.getElementById('searchInput').value;
+            const resultElement = document.getElementById('result');
+            
+            if (input.startsWith('!')) {
+                const [bang, ...searchTerms] = input.split(' ');
+                const searchTerm = searchTerms.join(' ');
+                resultElement.textContent = `Searching with ${bang} for "${searchTerm}"`;
+            } else {
+                resultElement.textContent = `Regular search for "${input}"`;
+            }
         }
+
+        // Handle Enter key press
+        document.getElementById('searchInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                handleSearch();
+            }
+        });
+
+        // Check for URL parameters and pre-fill the search box
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const query = urlParams.get('q');
+            if (query && query.startsWith('!')) {
+                const [bang, ...searchTerms] = query.split(' ');
+                document.getElementById('searchInput').value = searchTerms.join(' ');
+                handleSearch();
+            }
+        };
     </script>
 </body>
 </html>
