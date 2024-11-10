@@ -199,15 +199,16 @@ function updateLinks() {
 
 // Event listeners
 document.addEventListener('DOMContentLoaded', function() {
-    const textbox = document.getElementById("textbox");
-    const scrollContainer = document.getElementById('scroll-container');
-
-    // Event delegation for dynamically added list items
-    document.addEventListener('click', function(event) {
-        if (event.target && event.target.matches('li')) {
-            textbox.value = event.target.textContent;
-        }
-    });
+  const urlParams = new URLSearchParams(window.location.search);
+  const query = urlParams.get('q');
+  if (query) {
+    const textbox = document.getElementById('textbox');
+    if (textbox) {
+      textbox.value = query;
+      handleBangSearch(query);
+    }
+  }
+});
 
     // Scroll container event
     if (scrollContainer) {
