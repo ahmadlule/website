@@ -151,45 +151,49 @@ ul {
         }
 
 function storeRecentText() {
-    var textbox = document.getElementById("textbox");
-    var recentTextsList = document.getElementById("recentTexts");
+    const textbox = document.getElementById("textbox");
+    const recentTextsList = document.getElementById("recentTexts");
     
-    // Store the new text
-    recentTexts.unshift(textbox.value);
-    
-    // Keep only the last five texts
-    recentTexts = recentTexts.slice(0, 5);
-    
-    // Update the list
+    if (textbox.value.trim() !== '') {
+        // Store the new text
+        recentTexts.unshift(textbox.value);
+        
+        // Keep only the last five texts
+        recentTexts = recentTexts.slice(0, 5);
+        
+        // Update the list
+        updateRecentTextsList(recentTextsList);
+    }
+}
+
+function updateRecentTextsList(recentTextsList) {
     recentTextsList.innerHTML = '';
-    recentTexts.forEach(function(text, index) {
-        var li = document.createElement('li');
+    recentTexts.forEach((text, index) => {
+        const li = document.createElement('li');
         li.textContent = text;
         li.setAttribute('data-index', index);
         li.onclick = function() {
-            textbox.value = text;
+            document.getElementById("textbox").value = text;
         };
         recentTextsList.appendChild(li);
     });
-    
-    // Don't clear the textbox here
 }
 
 function handleBangSearch(input) {
-  let resultElement = document.getElementById('result');
-  if (!resultElement) {
-    resultElement = document.createElement('p');
-    resultElement.id = 'result';
-    document.body.appendChild(resultElement);
-  }
-  
-  if (input.startsWith('!')) {
-    const [bang, ...searchTerms] = input.split(' ');
-    const searchTerm = searchTerms.join(' ');
-    resultElement.textContent = `Searching with ${bang} for "${searchTerm}"`;
-  } else {
-    resultElement.textContent = `Regular search for "${input}"`;
-  }
+    let resultElement = document.getElementById('result');
+    if (!resultElement) {
+        resultElement = document.createElement('p');
+        resultElement.id = 'result';
+        document.body.appendChild(resultElement);
+    }
+    
+    if (input.startsWith('!')) {
+        const [bang, ...searchTerms] = input.split(' ');
+        const searchTerm = searchTerms.join(' ');
+        resultElement.textContent = `Searching with ${bang} for "${searchTerm}"`;
+    } else {
+        resultElement.textContent = `Regular search for "${input}"`;
+    }
 }
 
 function updateLinks() {
@@ -197,25 +201,26 @@ function updateLinks() {
     console.log("updateLinks function called");
 }
 
-// Event listeners
-document.addEventListener('DOMContentLoaded', function() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const query = urlParams.get('q');
-  if (query) {
-    const textbox = document.getElementById('textbox');
-    if (textbox) {
-      textbox.value = query;
-      handleBangSearch(query);
-    }
-  }
-});
+// Main initialization function
+function initializeApp() {
+    const textbox = document.getElementById("textbox");
+    const recentTextsList = document.getElementById("recentTexts");
+    const scrollContainer = document.getElementById('scroll-container');
+
+    // Event delegation for dynamically added list items
+    document.addEventListener('click', function(event) {
+        if (event.target && event.target.matches('li')) {
+            textbox.value = event.target.textContent;
+            updateLinks();
+        }
+    });
 
     // Scroll container event
     if (scrollContainer) {
         scrollContainer.addEventListener('wheel', (event) => {
             if (event.deltaY !== 0) {
                 event.preventDefault();
-                scrollContainer.scrollLeft += event.deltaX;
+                scrollContainer.scrollLeft += event.deltaY;
             }
         });
     }
@@ -227,6 +232,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (event.key === 'Enter') {
                 storeRecentText();
                 handleBangSearch(this.value);
+                event.preventDefault(); // Prevent form submission if within a form
             }
         });
     }
@@ -239,7 +245,15 @@ document.addEventListener('DOMContentLoaded', function() {
         updateLinks();
         handleBangSearch(query);
     }
-});
+
+    // Initialize recent texts list
+    if (recentTextsList) {
+        updateRecentTextsList(recentTextsList);
+    }
+}
+
+// Run initialization when the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', initializeApp);
     </script>
 </head>
 <body>
