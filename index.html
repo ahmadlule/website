@@ -150,7 +150,7 @@ ul {
             document.getElementById('perplexity').href =  'https://www.perplexity.ai/search?q=' + textBoxValue + '';
         }
 
-        function storeRecentText() {
+function storeRecentText() {
     var textbox = document.getElementById("textbox");
     var recentTextsList = document.getElementById("recentTexts");
     
@@ -158,7 +158,7 @@ ul {
     recentTexts.unshift(textbox.value);
     
     // Keep only the last five texts
-    recentTexts = recentTexts.slice(0,   5);
+    recentTexts = recentTexts.slice(0, 5);
     
     // Update the list
     recentTextsList.innerHTML = '';
@@ -172,24 +172,72 @@ ul {
         recentTextsList.appendChild(li);
     });
     
-    // Clear the textbox
-    
+    // Don't clear the textbox here
 }
 
-// Event delegation for dynamically added list items
-document.addEventListener('click', function(event) {
-  if (event.target && event.target.matches('li')) {
-    var textbox = document.getElementById("textbox");
-    textbox.value = event.target.textContent;
-  }
-});
-const scrollContainer = document.getElementById('scroll-container');
+function handleBangSearch(input) {
+    const resultElement = document.getElementById('result');
+    if (!resultElement) {
+        resultElement = document.createElement('p');
+        resultElement.id = 'result';
+        document.body.appendChild(resultElement);
+    }
+    
+    if (input.startsWith('!')) {
+        const [bang, ...searchTerms] = input.split(' ');
+        const searchTerm = searchTerms.join(' ');
+        resultElement.textContent = `Searching with ${bang} for "${searchTerm}"`;
+    } else {
+        resultElement.textContent = `Regular search for "${input}"`;
+    }
+}
 
-scrollContainer.addEventListener('wheel', (event) => {
-  if (event.deltaY !== 0) {
-    event.preventDefault();
-    scrollContainer.scrollLeft += event.deltaX;
-  }
+function updateLinks() {
+    // Implement this function if it's not already defined elsewhere
+    console.log("updateLinks function called");
+}
+
+// Event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    const textbox = document.getElementById("textbox");
+    const scrollContainer = document.getElementById('scroll-container');
+
+    // Event delegation for dynamically added list items
+    document.addEventListener('click', function(event) {
+        if (event.target && event.target.matches('li')) {
+            textbox.value = event.target.textContent;
+        }
+    });
+
+    // Scroll container event
+    if (scrollContainer) {
+        scrollContainer.addEventListener('wheel', (event) => {
+            if (event.deltaY !== 0) {
+                event.preventDefault();
+                scrollContainer.scrollLeft += event.deltaX;
+            }
+        });
+    }
+
+    // Textbox event listeners
+    if (textbox) {
+        textbox.addEventListener('keyup', updateLinks);
+        textbox.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                storeRecentText();
+                handleBangSearch(this.value);
+            }
+        });
+    }
+
+    // Check for URL parameters and pre-fill the search box
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = urlParams.get('q');
+    if (query && textbox) {
+        textbox.value = query;
+        updateLinks();
+        handleBangSearch(query);
+    }
 });
     </script>
 </head>
