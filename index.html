@@ -148,6 +148,10 @@ ul {
 	    document.getElementById('islampub').href =  'https://islamicpublishing.org/all-contents?search=' + textBoxValue + '';
 				
             document.getElementById('perplexity').href =  'https://www.perplexity.ai/search?q=' + textBoxValue + '';
+		
+	    document.getElementById('deepseek').href =  'https://chat.deepseek.com/?q=%s' + textBoxValue + '';
+				
+            document.getElementById('chatgpt').href =  'https://chatgpt.com/?q=' + textBoxValue + '';
         }
 
 
@@ -246,7 +250,7 @@ document.addEventListener('DOMContentLoaded', initializeApp);
 </head>
 <body>
 <table id="table" src="https://imgs.search.brave.com/FwrwbbUx5WeNrDucz2ioGuu7s-pYMHsokegvnGfUAyM/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA0LzA2LzkwLzQz/LzM2MF9GXzQwNjkw/NDM3OV9idnhPRDhw/ZE5takwwdWg1ZWxw/SkNMQmx3cFJkdEl0/Sy5qcGc'">
-	<tr><td>    <img src="abc/tbselogo.webp" style="height: 300xp; width: auto;" alt="The Best Search Engine" id = "image" href="https://ahmadlule.github.io/website/" >
+	<tr><td>    <img src="logos/tbselogo.webp" style="height: 300xp; width: auto;" alt="The Best Search Engine" id = "image" href="https://ahmadlule.github.io/website/" >
 </td></tr>
 	<tr><td>    <input type="text" id="textbox" onkeyup="updateLinks()" placeholder="Search."/><ul id="recentTexts">
 </td></tr>
@@ -257,7 +261,7 @@ document.addEventListener('DOMContentLoaded', initializeApp);
    <!--
 	tiktok reddit tele wiki linkedin threads yahoo archive github   
 	google youtube duckduckgo bing ask brave  openverse startpage wolfram
-	phind perplexity you yep bagoodex
+	chatgpt deepseek phind perplexity you yep bagoodex 
 	islamqna ahadth kalamullah sunnah islampub
 	-->
 
@@ -267,39 +271,42 @@ document.addEventListener('DOMContentLoaded', initializeApp);
 	<a id="brave" target="_blank"><img src="https://cdn.search.brave.com/serp/v2/_app/immutable/assets/brave-logo-light.FAaOVUJt.svg" width="100" height="50" alt="brave"></a>
 	<a id="duckduckgo" target="_blank"><img src="https://imgs.search.brave.com/Uc8ZLIWjcjZxnSs53Ogb4mtpYjmCMnWUY7XguqpO9EI/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9sb2dv/cy13b3JsZC5uZXQv/d3AtY29udGVudC91/cGxvYWRzLzIwMjIv/MDQvRHVja0R1Y2tH/by1TeW1ib2wtNzAw/eDM5NC5wbmc" width="100" height="50" alt="duckduckgo"></a>
 	<a id="google" target="_blank"><img src="https://imgs.search.brave.com/SC6dbPCDxOX_PnvBnC_XKc9HEVy_v9lkaodJOgeOYHQ/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9hc3Nl/dHMuc3RpY2twbmcu/Y29tL2ltYWdlcy81/ODBiNTdmY2Q5OTk2/ZTI0YmM0M2M1MWYu/cG5n" width="80" height="40" alt="Google"></a>
-	<a id="openverse" target="_blank"><img src="abc/openverse.webp" width="120" height="50" alt="openverse"></a>
-	<a id="startpage" target="_blank"><img src="abc/startpage.svg" width="100" height="50" alt="startpage"></a>
-	<a id="wolfram" target="_blank"><img src="abc/wolfram.webp" width="50" height="50" alt="wolform"></a>
-	<a id="youtube" target="_blank"><img src="abc/youtube.webp" width="80" height="60" alt="Youtube"></a>
+	<a id="openverse" target="_blank"><img src="logos/openverse.webp" width="120" height="50" alt="openverse"></a>
+	<a id="startpage" target="_blank"><img src="logos/startpage.svg" width="100" height="50" alt="startpage"></a>
+	<a id="wolfram" target="_blank"><img src="logos/wolfram.webp" width="50" height="50" alt="wolform"></a>
+	<a id="youtube" target="_blank"><img src="logos/youtube.webp" width="80" height="60" alt="Youtube"></a>
 	 
 </div><br><br><br>
 <div class="scroll-container" id="scroll-container">
-	<a id="archive" target="_blank"><img src="abc/archive.webp" width="80" height="50" alt="archive"></a>
-	<a id="github" target="_blank"><img src="abc/github.webp" width="60" height="50" alt="github"></a>
-	<a id="linkedin" target="_blank"><img src="abc/linkedin.webp" width="60" height="50" alt="linkedin"></a>
-	<a id="reddit" target="_blank"><img src="abc/reddit.webp" width="120" height="50" alt="reddit"></a>
-	<a id="tele" target="_blank"><img src="abc/tele.svg" width="100" height="50" alt="tele"></a>
-	<a id="threads" target="_blank"><img src="abc/threads.webp" width="80" height="50" alt="threads"></a>
-	<a id="tiktok" target="_blank"><img src="abc/tiktok.webp" width="70" height="50" alt="tiktok"></a>
-	<a id="wiki" target="_blank"><img src="abc/wikipedia.webp" width="50" height="50" alt="wiki"></a>
-	<a id="yahoo" target="_blank"><img src="abc/yahoo.webp" width="100" height="40" alt="yahoo"></a>
+	<a id="archive" target="_blank"><img src="logos/archive.webp" width="80" height="50" alt="archive"></a>
+	<a id="github" target="_blank"><img src="logos/github.webp" width="60" height="50" alt="github"></a>
+	<a id="linkedin" target="_blank"><img src="logos/linkedin.webp" width="60" height="50" alt="linkedin"></a>
+	<a id="reddit" target="_blank"><img src="logos/reddit.webp" width="120" height="50" alt="reddit"></a>
+	<a id="tele" target="_blank"><img src="logos/tele.svg" width="100" height="50" alt="tele"></a>
+	<a id="threads" target="_blank"><img src="logos/threads.webp" width="80" height="50" alt="threads"></a>
+	<a id="tiktok" target="_blank"><img src="logos/tiktok.webp" width="70" height="50" alt="tiktok"></a>
+	<a id="wiki" target="_blank"><img src="logos/wikipedia.webp" width="50" height="50" alt="wiki"></a>
+	<a id="yahoo" target="_blank"><img src="logos/yahoo.webp" width="100" height="40" alt="yahoo"></a>
 </div><br><br><br>
 <div class="scroll-container" id="scroll-container">
-	<a id="bagoodex" target="_blank"><img src="abc/bagoodex.svg" width="60" height="50" alt="bagoodex"></a>
-	<a id="perplexity" target="_blank"><img src="abc/perplexity.png" width="50" height="50" alt="perplexity"></a>
+	<a id="chatgpt" target="_blank"><img src="logos/ChatGPT.png" width="100" height="40" alt="bagoodex"></a>
+	<a id="deepseek" target="_blank"><img src="logos/DeepSeek.png" width="100" height="40" alt="bagoodex"></a>
+	<a id="bagoodex" target="_blank"><img src="logos/bagoodex.svg" width="60" height="50" alt="bagoodex"></a>
+	<a id="perplexity" target="_blank"><img src="logos/perplexity.png" width="50" height="50" alt="perplexity"></a>
 	<a id="phind" target="_blank"><img src="https://www.phind.com/images/phind_v2.svg" width="100" height="50" alt="phind"></a>
 	<a id="you" target="_blank"><img src="https://cdn.you.com/img/shared/logos/ydc-logo.svg" width="100" height="50" alt="you"></a>
-	<a id="yep" target="_blank"><img src="abc/yep.svg" width="90" height="50" alt="yep"></a>
+	<a id="yep" target="_blank"><img src="logos/yep.svg" width="90" height="50" alt="yep"></a>
 	
 </div></div><br><br>
 <div class="scroll-container" id="scroll-container">
-	<a id="islamqna" target="_blank"><img src="abc/islamqna.png" width="60" height="50" alt="islamqna"></a>
-	<a id="ahadth" target="_blank"><img src="abc/ahadith.png" width="100" height="50" alt="ahadith"></a>
-	<a id="kalamullah" target="_blank"><img src="abc/kalamullah.webp" width="50" height="50" ahadith="kalamullahh"></a>
-	<a id="sunnah" target="_blank"><img src="abc/sunnah.jpg" width="50" height="50" alt="sunnah"></a>
-	<a id="islampub" target="_blank"><img src="abc/islampub.jpg" width="50" height="50" alt="islampub"></a>
+	<a id="islamqna" target="_blank"><img src="logos/islamqna.png" width="60" height="50" alt="islamqna"></a>
+	<a id="ahadth" target="_blank"><img src="logos/ahadith.png" width="100" height="50" alt="ahadith"></a>
+	<a id="kalamullah" target="_blank"><img src="logos/kalamullah.webp" width="50" height="50" ahadith="kalamullahh"></a>
+	<a id="sunnah" target="_blank"><img src="logos/sunnah.jpg" width="50" height="50" alt="sunnah"></a>
+	<a id="islampub" target="_blank"><img src="logos/islampub.jpg" width="50" height="50" alt="islampub"></a>
 </div>	
 <elevenlabs-convai agent-id="Y7UaL7q5dUdEiN30oIcY"></elevenlabs-convai><script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
 <a class="bookmarklet" href="javascript:(function()%7Bjavascript%3A(function()%7Bvar%20rect%20%3D%20document.createElement('div')%3Brect.style.position%20%3D%20'fixed'%3Brect.style.top%20%3D%20'97%25'%3Brect.style.left%20%3D%20'50%25'%3Brect.style.transform%20%3D%20'translate(-1%25%2C%20-80%25)'%3Brect.style.background%20%3D%20'white'%3Brect.style.border%20%3D%20'1px%20solid%20black'%3Brect.style.padding%20%3D%20'10px'%3Brect.style.width%20%3D%20'300px'%3Brect.style.zIndex%20%3D%20'9999'%3Brect.style.display%20%3D%20'flex'%3Brect.style.flexDirection%20%3D%20'column'%3Brect.style.alignItems%20%3D%20'center'%3Bvar%20arrowContainer%20%3D%20document.createElement('div')%3BarrowContainer.style.display%20%3D%20'flex'%3BarrowContainer.style.justifyContent%20%3D%20'pace-between'%3Bvar%20leftArrow%20%3D%20document.createElement('button')%3BleftArrow.innerHTML%20%3D%20'%26%238592%3B'%3BleftArrow.style.cursor%20%3D%20'pointer'%3BleftArrow.onclick%20%3D%20function()%7Brect.style.left%20%3D%20'0px'%3B%7D%3Bvar%20rightArrow%20%3D%20document.createElement('button')%3BrightArrow.innerHTML%20%3D%20'%26%238594%3B'%3BrightArrow.style.cursor%20%3D%20'pointer'%3BrightArrow.onclick%20%3D%20function()%7Brect.style.left%20%3D%20'calc(100%25%20-%20300px)'%3B%7D%3BarrowContainer.appendChild(leftArrow)%3BarrowContainer.appendChild(rightArrow)%3Bvar%20inputBox%20%3D%20document.createElement('input')%3BinputBox.type%20%3D%20'text'%3BinputBox.style.width%20%3D%20'100%25'%3BinputBox.style.padding%20%3D%20'5px'%3BinputBox.style.border%20%3D%20'1px%20solid%20black'%3Bvar%20buttonContainer1%20%3D%20document.createElement('div')%3BbuttonContainer1.style.display%20%3D%20'flex'%3BbuttonContainer1.style.justifyContent%20%3D%20'pace-between'%3Bvar%20button1%20%3D%20document.createElement('button')%3Bbutton1.innerHTML%20%3D%20'Google'%3Bbutton1.onclick%20%3D%20function()%7Bvar%20inputValue%20%3D%20inputBox.value.trim()%3Bif%20(inputValue.toLowerCase()%20%3D%3D%3D%20'tbse')%20%7Bwindow.open('https%3A%2F%2Fahmadlule.github.io%2Fwebsite%2Finput'%2C%20'_blank')%3B%7D%20else%20%7Bwindow.open('https%3A%2F%2Fwww.google.com%2Fsearch%3Fq%3D'%20%2B%20inputValue%2C%20'_blank')%3B%7D%7D%3Bvar%20button2%20%3D%20document.createElement('button')%3Bbutton2.innerHTML%20%3D%20'YouTube'%3Bbutton2.onclick%20%3D%20function()%7Bvar%20inputValue%20%3D%20inputBox.value.trim()%3Bif%20(inputValue.toLowerCase()%20%3D%3D%3D%20'tbse')%20%7Bwindow.open('https%3A%2F%2Fahmadlule.github.io%2Fwebsite%2Finput'%2C%20'_blank')%3B%7D%20else%20%7Bwindow.open('https%3A%2F%2Fwww.youtube.com%2Fresults%3Fsearch_query%3D'%20%2B%20inputValue%2C%20'_blank')%3B%7D%7D%3BbuttonContainer1.appendChild(button1)%3BbuttonContainer1.appendChild(button2)%3Bvar%20buttonContainer2%20%3D%20document.createElement('div')%3BbuttonContainer2.style.display%20%3D%20'flex'%3BbuttonContainer2.style.justifyContent%20%3D%20'pace-between'%3Bvar%20button3%20%3D%20document.createElement('button')%3Bbutton3.innerHTML%20%3D%20'Bing'%3Bbutton3.onclick%20%3D%20function()%7Bvar%20inputValue%20%3D%20inputBox.value.trim()%3Bif%20(inputValue.toLowerCase()%20%3D%3D%3D%20'tbse')%20%7Bwindow.open('https%3A%2F%2Fahmadlule.github.io%2Fwebsite%2Finput'%2C%20'_blank')%3B%7D%20else%20%7Bwindow.open('https%3A%2F%2Fwww.bing.com%2Fsearch%3Fq%3D'%20%2B%20inputValue%2C%20'_blank')%3B%7D%7D%3Bvar%20button4%20%3D%20document.createElement('button')%3Bbutton4.innerHTML%20%3D%20'DuckDuckGo'%3Bbutton4.onclick%20%3D%20function()%7Bvar%20inputValue%20%3D%20inputBox.value.trim()%3Bif%20(inputValue.toLowerCase()%20%3D%3D%3D%20'tbse')%20%7Bwindow.open('https%3A%2F%2Fahmadlule.github.io%2Fwebsite%2Finput'%2C%20'_blank')%3B%7D%20else%20%7Bwindow.open('https%3A%2F%2Fduckduckgo.com%2F%3Fq%3D'%20%2B%20inputValue%2C%20'_blank')%3B%7D%7D%3BbuttonContainer2.appendChild(button3)%3BbuttonContainer2.appendChild(button4)%3Bvar%20closeButton%20%3D%20document.createElement('button')%3BcloseButton.innerHTML%20%3D%20'Close'%3BcloseButton.style.cursor%20%3D%20'pointer'%3BcloseButton.onclick%20%3D%20function()%7Brect.parentNode.removeChild(rect)%3B%7D%3Brect.appendChild(arrowContainer)%3Brect.appendChild(inputBox)%3Brect.appendChild(buttonContainer1)%3Brect.appendChild(buttonContainer2)%3Brect.appendChild(closeButton)%3Bdocument.body.appendChild(rect)%3B%7D)()%7D)()">Drag this to Bookmarks</a>
+<p>To set as default search engine: https://ahmadlule.github.io/website/?q=%s</p>
 </body>
 </html>
