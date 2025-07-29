@@ -1,51 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bang Search</title>
-    <style>
-        /* Your existing CSS styles here */
-    </style>
+  <meta charset="UTF-8">
+  <title>n8n Local Webhook Trigger</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 500px;
+      margin: 50px auto;
+      padding: 20px;
+      border-radius: 10px;
+      background-color: #f9f9f9;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    #output {
+      margin-top: 20px;
+      padding: 10px;
+      background: #e0ffe0;
+      border-left: 4px solid #0a0;
+    }
+    #error {
+      color: red;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Bang Search</h1>
-        <input type="text" id="searchInput" placeholder="Enter your search">
-        <button onclick="handleSearch()">Search</button>
-        <p id="result"></p>
-    </div>
+  <h2>Send Message to n8n</h2>
 
-    <script>
-        function handleSearch() {
-            const input = document.getElementById('searchInput').value;
-            const resultElement = document.getElementById('result');
-            
-            if (input.startsWith('!')) {
-                const [bang, ...searchTerms] = input.split(' ');
-                const searchTerm = searchTerms.join(' ');
-                resultElement.textContent = `Searching with ${bang} for "${searchTerm}"`;
-            } else {
-                resultElement.textContent = `Regular search for "${input}"`;
-            }
-        }
+  <input type="text" id="inputText" placeholder="Enter your message..." />
+  <button onclick="sendToWebhook()">Send</button>
 
-        // Handle Enter key press
-        document.getElementById('searchInput').addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                handleSearch();
-            }
+  <div id="output" style="display: none;"></div>
+  <div id="error"></div>
+
+  <script>
+    const webhookUrl = 'http://192.168.1.50:5678/webhook/local'; // <-- Replace with your laptop's IP and webhook path
+
+    function isLocalNetwork() {
+      // This check is to ensure it's only triggered locally
+      return location.hostname.startsWith('192.168.') || location.hostname === 'localhost' || location.hostname.endsWith('.local');
+    }
+
+    async function sendToWebhook() {
+      const input = document.getElementById('inputText').value;
+      const outputBox = document.getElementById('output');
+      const errorBox = document.getElementById('error');
+
+      outputBox.style.display = 'none';
+      errorBox.textContent = '';
+
+      if (!isLocalNetwork()) {
+        errorBox.textContent = "You must be connected to the local network to use this.";
+        return;
+      }
+
+      if (!input) {
+        errorBox.textContent = "Please enter a message.";
+        return;
+      }
+
+      try {
+        const response = await fetch(webhookUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ message: input })
         });
 
-        // Check for URL parameters and pre-fill the search box
-        window.onload = function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const query = urlParams.get('q');
-            if (query) {
-                document.getElementById('searchInput').value = query;
-                handleSearch();
-            }
-        };
-    </script>
+        if (!response.ok) throw new Error('Network response was not ok');
+
+        const data = await response.json();
+        outputBox.textContent = data.reply || JSON.stringify(data, null, 2);
+        outputBox.style.display = 'block';
+
+      } catch (err) {
+        errorBox.textContent = "Failed to send or receive response: " + err.message;
+      }
+    }
+  </script>
 </body>
 </html>
