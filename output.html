@@ -44,7 +44,7 @@
 
     function isLocalNetwork() {
       // This check is to ensure it's only triggered locally
-      return location.hostname.startsWith('192.168.') || location.hostname === 'localhost' || location.hostname.endsWith('.local');
+      return location.hostname.startsWith('http') || location.hostname === 'localhost' || location.hostname.endsWith('local');
     }
 
     async function sendToWebhook() {
