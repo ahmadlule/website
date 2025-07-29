@@ -2,86 +2,98 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>n8n Local Webhook Trigger</title>
+  <title>n8n Local Webhook Tester</title>
   <style>
     body {
       font-family: sans-serif;
-      max-width: 500px;
-      margin: 50px auto;
+      max-width: 600px;
+      margin: 40px auto;
       padding: 20px;
+      background: #f7f7f7;
       border-radius: 10px;
-      background-color: #f9f9f9;
     }
     input, button {
-      padding: 10px;
-      font-size: 16px;
       width: 100%;
-      margin-bottom: 10px;
+      padding: 12px;
+      margin: 10px 0;
+      font-size: 16px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
     }
     #output {
       margin-top: 20px;
       padding: 10px;
       background: #e0ffe0;
       border-left: 4px solid #0a0;
+      display: none;
     }
     #error {
       color: red;
       margin-top: 10px;
     }
+    label {
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
-  <h2>Send Message to n8n</h2>
+  <h2>n8n Webhook Tester</h2>
 
-  <input type="text" id="inputText" placeholder="Enter your message..." />
-  <button onclick="sendToWebhook()">Send</button>
+  <label for="ipInput">Enter IP Address of n8n Host:</label>
+  <input type="text" id="ipInput" placeholder="e.g., 192.168.1.50">
 
-  <div id="output" style="display: none;"></div>
+  <label for="inputText">Enter Message:</label>
+  <input type="text" id="inputText" placeholder="Your message here...">
+
+  <button onclick="sendToWebhook()">Send to n8n</button>
+
+  <div id="output"></div>
   <div id="error"></div>
 
   <script>
-    const webhookUrl = 'http://0.0.0.0:5678/webhook-test/local'; // <-- Replace with your laptop's IP and webhook path
-
-    function isLocalNetwork() {
-      // This check is to ensure it's only triggered locally
-      return location.hostname.startsWith('http') || location.hostname === 'localhost' || location.hostname.endsWith('local');
-    }
-
     async function sendToWebhook() {
-      const input = document.getElementById('inputText').value;
+      const ip = document.getElementById('ipInput').value.trim();
+      const message = document.getElementById('inputText').value.trim();
       const outputBox = document.getElementById('output');
       const errorBox = document.getElementById('error');
 
       outputBox.style.display = 'none';
+      outputBox.textContent = '';
       errorBox.textContent = '';
 
-      if (!isLocalNetwork()) {
-        errorBox.textContent = "You must be connected to the local network to use this.";
+      if (!ip) {
+        errorBox.textContent = "Please enter the IP address of your n8n machine.";
         return;
       }
 
-      if (!input) {
-        errorBox.textContent = "Please enter a message.";
+      if (!message) {
+        errorBox.textContent = "Please enter a message to send.";
         return;
       }
+
+      const url = `http://${ip}:5678/webhook-test/local`;
 
       try {
-        const response = await fetch(webhookUrl, {
+        const response = await fetch(url, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ message: input })
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message })
         });
 
-        if (!response.ok) throw new Error('Network response was not ok');
+        if (!response.ok) throw new Error(`Server responded with status ${response.status}`);
 
         const data = await response.json();
         outputBox.textContent = data.reply || JSON.stringify(data, null, 2);
         outputBox.style.display = 'block';
-
       } catch (err) {
-        errorBox.textContent = "Failed to send or receive response: " + err.message;
+        errorBox.textContent = "Failed to connect to webhook. Make sure you're on the same network and the IP is correct.\nError: " + err.message;
       }
     }
   </script>
