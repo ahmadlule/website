@@ -2,55 +2,78 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Webhook Trigger</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>n8n Webhook Test</title>
   <style>
-    body { font-family: sans-serif; padding: 20px; max-width: 500px; margin: auto; }
-    input, button, textarea { width: 100%; margin-top: 10px; padding: 10px; }
-    button { background-color: #4CAF50; color: white; border: none; cursor: pointer; }
-    button:hover { background-color: #45a049; }
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px 0;
+      width: 100%;
+    }
+    #output {
+      margin-top: 20px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
-  <h2>Send Message to n8n</h2>
-  
-  <input type="text" id="inputText" placeholder="Enter your message here" />
-  <button onclick="sendToWebhook()">Send</button>
+  <h1>n8n Webhook Test</h1>
 
-  <h3>Response from n8n:</h3>
-  <textarea id="outputText" rows="5" readonly></textarea>
+  <label for="message">Message:</label>
+  <input type="text" id="message" placeholder="Enter your message">
+
+  <button onclick="sendWebhook()">Send to n8n</button>
+
+  <div id="output"></div>
 
   <script>
-    async function sendToWebhook() {
-      const message = document.getElementById("inputText").value;
-      const output = document.getElementById("outputText");
+    let baseUrl = "";
 
-      output.value = "Fetching tunnel URL...";
+    // Load the current domain from domainurl.txt
+    fetch("domainurl.txt")
+      .then((res) => res.text())
+      .then((text) => {
+        baseUrl = text.trim().replace(/\/$/, ""); // Remove trailing slash if any
+        console.log("Loaded base URL:", baseUrl);
+      })
+      .catch(() => {
+        document.getElementById("output").innerText = "Could not load domainurl.txt";
+      });
+
+    async function sendWebhook() {
+      const message = document.getElementById("message").value.trim();
+      const outputDiv = document.getElementById("output");
+
+      if (!baseUrl || !message) {
+        outputDiv.innerText = "Missing URL or message.";
+        return;
+      }
+
+      const fullUrl = `${baseUrl}/webhook-test/local`;
 
       try {
-        const res = await fetch("domainurl.txt");
-        if (!res.ok) throw new Error("Could not fetch domainurl.txt");
-        
-        const domain = (await res.text()).trim();
-        const webhookUrl = `${domain}/webhook-test/local`;
-
-        output.value = "Sending data to: " + webhookUrl;
-
-        const response = await fetch(webhookUrl, {
+        const response = await fetch(fullUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ message })
         });
 
         if (!response.ok) {
-          const err = await response.text();
-          throw new Error("Webhook error: " + err);
+          throw new Error(`Server responded with status ${response.status}`);
         }
 
         const data = await response.json();
-        output.value = JSON.stringify(data, null, 2);
+        const result = data.message || data.output || JSON.stringify(data);
+        outputDiv.innerText = result;
 
-      } catch (err) {
-        output.value = "❌ " + err.message;
+      } catch (error) {
+        outputDiv.innerText = "Error: " + error.message;
       }
     }
   </script>
