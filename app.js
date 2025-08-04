@@ -149,7 +149,7 @@ queryInput.addEventListener("keydown", (e) => {
 // =========================
 // Chatbot via OpenRouter
 // =========================
-const OPENROUTER_API_KEY = "YOUR_OPENROUTER_API_KEY"; // Replace securely in production
+const OPENROUTER_API_KEY = "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"; // Replace securely in production
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 
 const expandChatBtn = document.getElementById("expandChatBtn");
