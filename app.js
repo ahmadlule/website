@@ -154,7 +154,7 @@ queryInput.addEventListener("keydown", (e) => {
 */
 // =========================
 
-const encodedKey = "c2stb3ItdjEtNjdlNjNlNGZkOGVkZWE0YmM0ZGExYzVhMDQ2YzVkYzk1MmYxYzVlZjU1ZjM2MGQwYWMwNzJhZGNhNmY0NDZhOQ=="
+const encodedKey = "c2stb3ItdjEtMzA3NzViOTNhZGY5NGUzMTc2NmM0OTEwZTcxMTBiMWMxMmM1MTFlMzNiNzFiOTNjNjk2M2E0NjA2YmU1ZjQyNQ=="
 const OPENROUTER_API_KEY = atob(encodedKey); // Do not use this in production client-side
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 
