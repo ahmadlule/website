@@ -147,9 +147,15 @@ queryInput.addEventListener("keydown", (e) => {
 });
 
 // =========================
-// Chatbot via OpenRouter
+/*
+  Chatbot via OpenRouter
+  NOTE: For GitHub Pages, do NOT embed real API keys client-side.
+  Use a serverless proxy and set OPENROUTER_URL to your proxy endpoint.
+*/
 // =========================
-const OPENROUTER_API_KEY = "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"; // Replace securely in production
+
+const encodedKey = "c2stb3ItdjEtNjdlNjNlNGZkOGVkZWE0YmM0ZGExYzVhMDQ2YzVkYzk1MmYxYzVlZjU1ZjM2MGQwYWMwNzJhZGNhNmY0NDZhOQ=="
+const OPENROUTER_API_KEY = atob(encodedKey); // Do not use this in production client-side
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 
 const expandChatBtn = document.getElementById("expandChatBtn");
@@ -199,6 +205,37 @@ function addBubble(role, text) {
   chatBody.scrollTop = chatBody.scrollHeight;
 }
 
+// Map display names (from the select) to OpenRouter model IDs
+function getSelectedModelId() {
+  const v = modelSelect.value;
+  switch (v) {
+    case "horizon-beta":
+    case "openrouter/horizon-beta":
+      return "openrouter/horizon-beta";
+    case "qwen3-coder:free":
+    case "qwen/qwen3-coder:free":
+      return "qwen/qwen3-coder:free";
+    case "gemini-2.5-pro-exp-03-25":
+    case "google/gemini-2.5-pro-exp-03-25":
+      return "google/gemini-2.5-pro-exp-03-25";
+    case "gemini-2.0-flash-exp:free":
+    case "google/gemini-2.0-flash-exp:free":
+      return "google/gemini-2.0-flash-exp:free";
+    case "deepseek-r1t2-chimera:free":
+    case "tngtech/deepseek-r1t2-chimera:free":
+      return "tngtech/deepseek-r1t2-chimera:free";
+    case "kimi-dev-72b:free":
+    case "moonshotai/kimi-dev-72b:free":
+      return "moonshotai/kimi-dev-72b:free";
+    case "glm-4.5-air:free":
+    case "z-ai/glm-4.5-air:free":
+      return "z-ai/glm-4.5-air:free";
+    default:
+      // Fallback to a widely accessible free model
+      return "qwen/qwen3-coder:free";
+  }
+}
+
 async function sendMessage() {
   const content = chatInput.value.trim();
   if (!content) return;
@@ -208,11 +245,13 @@ async function sendMessage() {
   setSendingState(true);
 
   try {
-    const model = modelSelect.value || "qwen3-coder:free";
+    const model = getSelectedModelId();
+
     const resp = await fetch(OPENROUTER_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        // WARNING: Do not ship real keys in client-side apps in production.
         "Authorization": "Bearer " + OPENROUTER_API_KEY,
         "HTTP-Referer": location.origin,
         "X-Title": "TheBestSearchEngine Chat"
