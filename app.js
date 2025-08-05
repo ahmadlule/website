@@ -62,7 +62,7 @@ const CATEGORIES = [
   }
 ];
 
-// Sort engines in each category alphabetically
+// Sort engines alphabetically
 CATEGORIES.forEach(cat => cat.engines.sort((a, b) => a.name.localeCompare(b.name)));
 
 const sectionsEl = document.getElementById("sections");
@@ -119,7 +119,6 @@ function openSearch(urlPattern) {
   window.open(url, "_blank", "noopener,noreferrer");
 }
 
-// Google as default on Enter
 function getDefaultEngine() {
   for (const cat of CATEGORIES) {
     const g = cat.engines.find(e => e.name.toLowerCase() === "google");
@@ -129,7 +128,6 @@ function getDefaultEngine() {
   return null;
 }
 
-// Build UI
 renderSections();
 
 form.addEventListener("submit", (e) => {
@@ -147,16 +145,138 @@ queryInput.addEventListener("keydown", (e) => {
 });
 
 // =========================
-/*
-  Chatbot via OpenRouter
-  NOTE: For GitHub Pages, do NOT embed real API keys client-side.
-  Use a serverless proxy and set OPENROUTER_URL to your proxy endpoint.
-*/
+// Autocomplete (no backend) via DuckDuckGo JSONP
+// =========================
+let acTimer = null;
+let acDropdown = null;
+
+function ensureDropdown() {
+  if (acDropdown) return acDropdown;
+  acDropdown = document.createElement("div");
+  Object.assign(acDropdown.style, {
+    position: "absolute",
+    zIndex: "1000",
+    background: "rgba(20,24,32,0.98)",
+    border: "1px solid rgba(255,255,255,0.16)",
+    borderRadius: "10px",
+    boxShadow: "0 10px 24px rgba(0,0,0,0.35)",
+    padding: "6px 0",
+    display: "none",
+    maxHeight: "260px",
+    overflowY: "auto",
+    minWidth: "260px"
+  });
+  document.body.appendChild(acDropdown);
+  return acDropdown;
+}
+
+function positionDropdown() {
+  const bar = document.getElementById("searchForm");
+  const rect = bar.getBoundingClientRect();
+  const d = ensureDropdown();
+  d.style.left = `${rect.left + window.scrollX}px`;
+  d.style.top = `${rect.bottom + window.scrollY + 6}px`;
+  d.style.width = `${rect.width}px`;
+}
+
+function hideDropdown() {
+  if (acDropdown) acDropdown.style.display = "none";
+}
+
+function showDropdown(items) {
+  const d = ensureDropdown();
+  d.innerHTML = "";
+  items.forEach(text => {
+    const item = document.createElement("div");
+    item.textContent = text;
+    Object.assign(item.style, {
+      padding: "8px 12px",
+      cursor: "pointer",
+      color: "#e8ecf1"
+    });
+    item.addEventListener("mouseenter", () => item.style.background = "rgba(255,255,255,0.08)");
+    item.addEventListener("mouseleave", () => item.style.background = "transparent");
+    item.addEventListener("click", () => {
+      queryInput.value = text;
+      hideDropdown();
+      const def = getDefaultEngine();
+      if (def) openSearch(def.url);
+    });
+    d.appendChild(item);
+  });
+  positionDropdown();
+  d.style.display = items.length ? "block" : "none";
+}
+
+function fetchAutocomplete(q) {
+  // DuckDuckGo suggestions JSONP
+  const cb = "ddgCallback_" + Math.random().toString(36).slice(2);
+  const script = document.createElement("script");
+  const url = `https://duckduckgo.com/ac/?q=${encodeURIComponent(q)}&type=list&callback=${cb}`;
+  window[cb] = function (data) {
+    try {
+      const suggestions = Array.isArray(data) ? data.slice(0, 8) : [];
+      showDropdown(suggestions);
+    } finally {
+      delete window[cb];
+      script.remove();
+    }
+  };
+  script.src = url;
+  script.onerror = () => {
+    delete window[cb];
+    script.remove();
+    hideDropdown();
+  };
+  document.body.appendChild(script);
+}
+
+queryInput.addEventListener("input", () => {
+  const q = queryInput.value.trim();
+  if (!q) { hideDropdown(); return; }
+  clearTimeout(acTimer);
+  acTimer = setTimeout(() => fetchAutocomplete(q), 180);
+});
+window.addEventListener("resize", positionDropdown);
+window.addEventListener("scroll", positionDropdown, { passive: true });
+document.addEventListener("click", (e) => {
+  const bar = document.getElementById("searchForm");
+  if (!bar.contains(e.target) && (!acDropdown || !acDropdown.contains(e.target))) hideDropdown();
+});
+
+// =========================
+// Chatbot via OpenRouter (Streaming + Markdown + Vision + STT/TTS)
 // =========================
 
-const encodedKey = "c2stb3ItdjEtMzA3NzViOTNhZGY5NGUzMTc2NmM0OTEwZTcxMTBiMWMxMmM1MTFlMzNiNzFiOTNjNjk2M2E0NjA2YmU1ZjQyNQ=="
-const OPENROUTER_API_KEY = atob(encodedKey); // Do not use this in production client-side
+// IMPORTANT: Client-side keys are public. Prefer a proxy.
+const encodedKey = "c2stb3ItdjEtMzA3NzViOTNhZGY5NGUzMTc2NmM0OTEwZTcxMTBiMWMxMmM1MTFlMzNiNzFiOTNjNjk2M2E0NjA2YmU1ZjQyNQ==" 
+const OPENROUTER_API_KEY = atob(encodedKey);
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
+
+// Supported model IDs in the select should match these
+const MODEL_ALIASES = {
+  "horizon-beta": "openrouter/horizon-beta",
+  "openrouter/horizon-beta": "openrouter/horizon-beta",
+  "qwen3-coder:free": "qwen/qwen3-coder:free",
+  "qwen/qwen3-coder:free": "qwen/qwen3-coder:free",
+  "gemini-2.5-pro-exp-03-25": "google/gemini-2.5-pro-exp-03-25",
+  "google/gemini-2.5-pro-exp-03-25": "google/gemini-2.5-pro-exp-03-25",
+  "gemini-2.0-flash-exp:free": "google/gemini-2.0-flash-exp:free",
+  "google/gemini-2.0-flash-exp:free": "google/gemini-2.0-flash-exp:free",
+  "deepseek-r1t2-chimera:free": "tngtech/deepseek-r1t2-chimera:free",
+  "tngtech/deepseek-r1t2-chimera:free": "tngtech/deepseek-r1t2-chimera:free",
+  "kimi-dev-72b:free": "moonshotai/kimi-dev-72b:free",
+  "moonshotai/kimi-dev-72b:free": "moonshotai/kimi-dev-72b:free",
+  "glm-4.5-air:free": "z-ai/glm-4.5-air:free",
+  "z-ai/glm-4.5-air:free": "z-ai/glm-4.5-air:free"
+};
+
+// Models that accept images
+const VISION_MODELS = new Set([
+  "openrouter/horizon-beta",
+  "google/gemini-2.5-pro-exp-03-25",
+  "google/gemini-2.0-flash-exp:free"
+]);
 
 const expandChatBtn = document.getElementById("expandChatBtn");
 const chatPanel = document.getElementById("chatPanel");
@@ -166,6 +286,134 @@ const sendBtn = document.getElementById("sendBtn");
 const clearBtn = document.getElementById("clearBtn");
 const insertQueryBtn = document.getElementById("insertQueryBtn");
 const modelSelect = document.getElementById("modelSelect");
+
+// Add extra UI for chat features dynamically (file input, controls)
+function ensureChatEnhancementsUI() {
+  if (document.getElementById("chatExtras")) return;
+  const footer = chatPanel.querySelector(".chat-footer");
+  const container = document.createElement("div");
+  container.id = "chatExtras";
+  container.style.gridColumn = "1 / -1";
+  container.style.display = "flex";
+  container.style.flexWrap = "wrap";
+  container.style.gap = "8px";
+  container.style.alignItems = "center";
+  container.style.marginTop = "2px";
+
+  // Image upload
+  const fileInput = document.createElement("input");
+  fileInput.type = "file";
+  fileInput.accept = "image/*";
+  fileInput.id = "imageInput";
+  fileInput.style.display = "none";
+
+  const uploadBtn = document.createElement("button");
+  uploadBtn.type = "button";
+  uploadBtn.className = "small-btn";
+  uploadBtn.textContent = "Attach Image";
+  uploadBtn.title = "Attach an image (vision-capable models only)";
+  uploadBtn.addEventListener("click", () => fileInput.click());
+
+  const imgChip = document.createElement("span");
+  imgChip.id = "imageChip";
+  imgChip.textContent = "";
+  imgChip.style.display = "none";
+  imgChip.style.padding = "6px 8px";
+  imgChip.style.border = "1px solid rgba(255,255,255,0.16)";
+  imgChip.style.borderRadius = "8px";
+  imgChip.style.fontSize = "12px";
+  imgChip.style.color = "#b7c0cc";
+
+  fileInput.addEventListener("change", () => {
+    if (fileInput.files && fileInput.files[0]) {
+      imgChip.textContent = `Attached: ${fileInput.files[0].name}`;
+      imgChip.style.display = "inline-block";
+    } else {
+      imgChip.textContent = "";
+      imgChip.style.display = "none";
+    }
+  });
+
+  // STT
+  const sttBtn = document.createElement("button");
+  sttBtn.type = "button";
+  sttBtn.className = "small-btn";
+  sttBtn.textContent = "🎤 Speak";
+  sttBtn.title = "Speech-to-text";
+
+  // TTS
+  const ttsBtn = document.createElement("button");
+  ttsBtn.type = "button";
+  ttsBtn.className = "small-btn";
+  ttsBtn.textContent = "🔊 Read";
+  ttsBtn.title = "Read last response";
+
+  container.appendChild(uploadBtn);
+  container.appendChild(imgChip);
+  container.appendChild(fileInput);
+  container.appendChild(sttBtn);
+  container.appendChild(ttsBtn);
+  footer.appendChild(container);
+
+  // STT logic
+  let recognition = null;
+  let recognizing = false;
+  if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
+    const Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new Rec();
+    recognition.lang = "en-US";
+    recognition.interimResults = true;
+    recognition.continuous = false;
+
+    recognition.onresult = (e) => {
+      let finalTranscript = "";
+      for (let i = e.resultIndex; i < e.results.length; ++i) {
+        const res = e.results[i];
+        if (res.isFinal) finalTranscript += res[0].transcript;
+      }
+      if (finalTranscript) {
+        chatInput.value = (chatInput.value ? chatInput.value + " " : "") + finalTranscript.trim();
+      }
+    };
+    recognition.onstart = () => {
+      recognizing = true;
+      sttBtn.textContent = "🛑 Stop";
+    };
+    recognition.onend = () => {
+      recognizing = false;
+      sttBtn.textContent = "🎤 Speak";
+    };
+    sttBtn.addEventListener("click", () => {
+      if (!recognition) return;
+      if (!recognizing) recognition.start();
+      else recognition.stop();
+    });
+  } else {
+    sttBtn.disabled = true;
+    sttBtn.title = "Speech recognition not supported in this browser";
+  }
+
+  // TTS logic
+  ttsBtn.addEventListener("click", () => {
+    const lastBot = Array.from(chatBody.querySelectorAll(".bubble.bot")).pop();
+    if (!lastBot) return;
+    const text = lastBot.textContent || "";
+    if (!("speechSynthesis" in window)) {
+      alert("Speech synthesis not supported in this browser.");
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.rate = 1.0;
+    utter.pitch = 1.0;
+    utter.volume = 1.0;
+    // Choose a voice if needed:
+    // const enVoice = speechSynthesis.getVoices().find(v => v.lang.startsWith("en"));
+    // if (enVoice) utter.voice = enVoice;
+    speechSynthesis.speak(utter);
+  });
+}
+ensureChatEnhancementsUI();
 
 expandChatBtn.addEventListener("click", () => {
   const show = chatPanel.style.display !== "block";
@@ -187,6 +435,69 @@ clearBtn.addEventListener("click", () => {
   chatBody.innerHTML = "";
 });
 
+// Markdown renderer (lightweight)
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
+}
+function renderMarkdown(md) {
+  // code blocks ```
+  md = md.replace(/```([\s\S]*?)```/g, (m, p1) => {
+    const code = escapeHtml(p1.trim());
+    return `<pre class="md-code"><code>${code}</code><button class="copy-btn" title="Copy">Copy</button></pre>`;
+  });
+  // inline code `
+  md = md.replace(/`([^`]+)`/g, (m, p1) => `<code class="md-inline">${escapeHtml(p1)}</code>`);
+  // headings
+  md = md.replace(/^###### (.*)$/gm, "<h6>$1</h6>");
+  md = md.replace(/^##### (.*)$/gm, "<h5>$1</h5>");
+  md = md.replace(/^#### (.*)$/gm, "<h4>$1</h4>");
+  md = md.replace(/^### (.*)$/gm, "<h3>$1</h3>");
+  md = md.replace(/^## (.*)$/gm, "<h2>$1</h2>");
+  md = md.replace(/^# (.*)$/gm, "<h1>$1</h1>");
+  // bold/italic
+  md = md.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+  md = md.replace(/\*([^*]+)\*/g, "<em>$1</em>");
+  // links
+  md = md.replace(/\[([^\]]+)\]\(([^)]+)\)/g, `<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>`);
+  // lists (basic)
+  md = md.replace(/^\s*-\s+(.*)$/gm, "<li>$1</li>");
+  md = md.replace(/(<li>[\s\S]*?<\/li>)/g, "<ul>$1</ul>");
+  // tables (basic: lines with |)
+  md = md.replace(/^(?:\|.+\|\r?\n)+/gm, (block) => {
+    const rows = block.trim().split(/\r?\n/).map(r => r.replace(/^\||\|$/g, "").split("|"));
+    const thead = rows.shift();
+    const header = `<thead><tr>${thead.map(c => `<th>${escapeHtml(c.trim())}</th>`).join("")}</tr></thead>`;
+    const body = `<tbody>${rows.map(r => `<tr>${r.map(c => `<td>${escapeHtml(c.trim())}</td>`).join("")}</tr>`).join("")}</tbody>`;
+    return `<table class="md-table">${header}${body}</table>`;
+  });
+  // paragraphs
+  md = md.replace(/^(?!<h\d|<ul|<table|<pre|<\/ul|<li|<\/li|<blockquote)[^\n]+$/gm, "<p>$&</p>");
+  return md;
+}
+
+function addBubble(role, text, isMarkdown = false) {
+  const div = document.createElement("div");
+  div.className = "bubble " + (role === "user" ? "user" : "bot");
+  if (isMarkdown) {
+    div.innerHTML = renderMarkdown(text);
+    // copy buttons
+    div.querySelectorAll(".copy-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const code = btn.previousElementSibling?.textContent || "";
+        navigator.clipboard.writeText(code).then(() => {
+          btn.textContent = "Copied";
+          setTimeout(() => (btn.textContent = "Copy"), 1200);
+        });
+      });
+    });
+  } else {
+    div.textContent = text;
+  }
+  chatBody.appendChild(div);
+  chatBody.scrollTop = chatBody.scrollHeight;
+  return div;
+}
+
 chatInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter" && !e.shiftKey) {
     e.preventDefault();
@@ -196,88 +507,71 @@ chatInput.addEventListener("keydown", (e) => {
 sendBtn.addEventListener("click", sendMessage);
 
 const history = []; // chat history
+let currentSSEController = null;
 
-function addBubble(role, text) {
-  const div = document.createElement("div");
-  div.className = "bubble " + (role === "user" ? "user" : "bot");
-  div.textContent = text;
-  chatBody.appendChild(div);
-  chatBody.scrollTop = chatBody.scrollHeight;
-}
-
-// Map display names (from the select) to OpenRouter model IDs
 function getSelectedModelId() {
   const v = modelSelect.value;
-  switch (v) {
-    case "horizon-beta":
-    case "openrouter/horizon-beta":
-      return "openrouter/horizon-beta";
-    case "qwen3-coder:free":
-    case "qwen/qwen3-coder:free":
-      return "qwen/qwen3-coder:free";
-    case "gemini-2.5-pro-exp-03-25":
-    case "google/gemini-2.5-pro-exp-03-25":
-      return "google/gemini-2.5-pro-exp-03-25";
-    case "gemini-2.0-flash-exp:free":
-    case "google/gemini-2.0-flash-exp:free":
-      return "google/gemini-2.0-flash-exp:free";
-    case "deepseek-r1t2-chimera:free":
-    case "tngtech/deepseek-r1t2-chimera:free":
-      return "tngtech/deepseek-r1t2-chimera:free";
-    case "kimi-dev-72b:free":
-    case "moonshotai/kimi-dev-72b:free":
-      return "moonshotai/kimi-dev-72b:free";
-    case "glm-4.5-air:free":
-    case "z-ai/glm-4.5-air:free":
-      return "z-ai/glm-4.5-air:free";
-    default:
-      // Fallback to a widely accessible free model
-      return "qwen/qwen3-coder:free";
-  }
+  return MODEL_ALIASES[v] || v || "qwen/qwen3-coder:free";
+}
+
+async function fileToBase64(file) {
+  const buf = await file.arrayBuffer();
+  const b64 = btoa(String.fromCharCode(...new Uint8Array(buf)));
+  return { b64, mime: file.type || "image/*" };
 }
 
 async function sendMessage() {
   const content = chatInput.value.trim();
-  if (!content) return;
-  addBubble("user", content);
-  history.push({ role: "user", content });
+  const fileInput = document.getElementById("imageInput");
+  const hasFile = fileInput && fileInput.files && fileInput.files[0];
+  const model = getSelectedModelId();
+  if (!content && !hasFile) return;
+
+  // User bubble shows text + image name if any
+  const partsDesc = [content];
+  if (hasFile) partsDesc.push(`[Image: ${fileInput.files[0].name}]`);
+  addBubble("user", partsDesc.filter(Boolean).join("\n"));
+
+  // Build message parts for vision
+  const userMessageParts = [];
+  if (content) userMessageParts.push({ type: "text", text: content });
+  if (hasFile && VISION_MODELS.has(model)) {
+    const { b64, mime } = await fileToBase64(fileInput.files[0]);
+    userMessageParts.push({
+      type: "input_image",
+      image_data: b64,
+      mime_type: mime
+    });
+  } else if (hasFile && !VISION_MODELS.has(model)) {
+    addBubble("bot", "Note: The selected model is not vision-capable. Image ignored.");
+  }
+  // Clear file chip
+  const chip = document.getElementById("imageChip");
+  if (chip) { chip.textContent = ""; chip.style.display = "none"; }
+  if (fileInput) fileInput.value = "";
+
+  // Push to history
+  const userMsg = userMessageParts.length > 1
+    ? { role: "user", content: userMessageParts }
+    : { role: "user", content: (content || "") };
+  history.push(userMsg);
   chatInput.value = "";
   setSendingState(true);
 
+  // Streaming response bubble
+  const botDiv = addBubble("bot", "", true);
+
   try {
-    const model = getSelectedModelId();
-
-    const resp = await fetch(OPENROUTER_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        // WARNING: Do not ship real keys in client-side apps in production.
-        "Authorization": "Bearer " + OPENROUTER_API_KEY,
-        "HTTP-Referer": location.origin,
-        "X-Title": "TheBestSearchEngine Chat"
-      },
-      body: JSON.stringify({
-        model,
-        messages: [
-          { role: "system", content: "You are a helpful assistant. Keep responses concise unless asked otherwise." },
-          ...history
-        ],
-        stream: false
-      })
-    });
-
-    if (!resp.ok) {
-      const t = await resp.text().catch(() => "");
-      throw new Error("API error " + resp.status + ": " + t);
-    }
-
-    const data = await resp.json();
-    const botText = data.choices?.[0]?.message?.content || "[No response]";
-    addBubble("assistant", botText);
-    history.push({ role: "assistant", content: botText });
+    await streamChat({
+      model,
+      messages: [
+        { role: "system", content: "You are a helpful assistant. Use Markdown for code and tables when appropriate." },
+        ...history
+      ]
+    }, botDiv);
   } catch (err) {
     console.error(err);
-    addBubble("assistant", "Error: " + (err?.message || "Request failed."));
+    botDiv.innerHTML = renderMarkdown("Error: " + (err?.message || "Request failed."));
   } finally {
     setSendingState(false);
   }
@@ -288,6 +582,79 @@ function setSendingState(sending) {
   chatInput.disabled = sending;
   modelSelect.disabled = sending;
   sendBtn.textContent = sending ? "Sending..." : "Send";
+  if (!sending && currentSSEController) {
+    currentSSEController = null;
+  }
+}
+
+// SSE streaming via fetch ReadableStream
+async function streamChat(payload, botDiv) {
+  if (currentSSEController) {
+    try { currentSSEController.abort(); } catch {}
+  }
+  const ctrl = new AbortController();
+  currentSSEController = ctrl;
+
+  const resp = await fetch(OPENROUTER_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + OPENROUTER_API_KEY,
+      "HTTP-Referer": location.origin,
+      "X-Title": "TheBestSearchEngine Chat"
+    },
+    body: JSON.stringify({ ...payload, stream: true }),
+    signal: ctrl.signal
+  });
+  if (!resp.ok || !resp.body) {
+    const t = await resp.text().catch(() => "");
+    throw new Error("API error " + resp.status + ": " + t);
+  }
+
+  const reader = resp.body.getReader();
+  const decoder = new TextDecoder("utf-8");
+  let mdText = "";
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    const chunk = decoder.decode(value, { stream: true });
+    // SSE format: lines starting with "data: ..."
+    const lines = chunk.split(/\r?\n/);
+    for (const line of lines) {
+      if (!line.startsWith("data:")) continue;
+      const data = line.slice(5).trim();
+      if (data === "[DONE]") continue;
+      try {
+        const json = JSON.parse(data);
+        const delta = json.choices?.[0]?.delta?.content;
+        if (typeof delta === "string") {
+          mdText += delta;
+          botDiv.innerHTML = renderMarkdown(mdText);
+          // Re-bind copy buttons after re-render
+          botDiv.querySelectorAll(".copy-btn").forEach(btn => {
+            if (btn._bound) return;
+            btn._bound = true;
+            btn.addEventListener("click", () => {
+              const code = btn.previousElementSibling?.textContent || "";
+              navigator.clipboard.writeText(code).then(() => {
+                btn.textContent = "Copied";
+                setTimeout(() => (btn.textContent = "Copy"), 1200);
+              });
+            });
+          });
+          chatBody.scrollTop = chatBody.scrollHeight;
+        }
+      } catch { /* ignore parse errors */ }
+    }
+  }
+
+  // Save to history
+  if (mdText) {
+    history.push({ role: "assistant", content: mdText });
+  } else {
+    botDiv.innerHTML = renderMarkdown("[No response]");
+  }
 }
 
 // Focus search input on load
