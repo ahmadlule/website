@@ -17,7 +17,7 @@
       --radius-sm: 10px;
       --blur: 20px;
       --focus: 0 0 0 2px rgba(116,179,255,0.4), 0 8px 24px rgba(0,0,0,0.3);
-      --accent: #8b5cf6;      /* standout violet for expand button */
+      --accent: #8b5cf6;
       --bot-bubble: rgba(116,179,255,0.14);
       --user-bubble: rgba(255,255,255,0.10);
     }
@@ -48,7 +48,7 @@
     }
 
     .card {
-      width: min(1000px, 96vw);
+      width: min(1100px, 96vw);
       padding: clamp(16px, 3.5vw, 28px);
       background: linear-gradient(180deg, var(--glass), rgba(255,255,255,0.06));
       border: 1px solid rgba(255,255,255,0.14);
@@ -81,6 +81,7 @@
       border-radius: 14px; padding: 10px 12px;
       box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
       transition: box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+      position: relative;
     }
     .searchbar:focus-within { border-color: rgba(116,179,255,0.55); box-shadow: var(--focus); background: rgba(255,255,255,0.10); }
     .search-icon { width: 20px; height: 20px; opacity: 0.85; }
@@ -95,7 +96,7 @@
       display: flex; align-items: center; gap: 8px; color: var(--muted);
       font-weight: 700; margin: 12px 2px 8px; letter-spacing: 0.2px; text-transform: uppercase; font-size: 11px;
     }
-    .engines { display: grid; grid-template-columns: repeat(auto-fit, minmax(132px, 1fr)); gap: 8px; }
+    .engines { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
     .btn {
       display: inline-flex; align-items: center; justify-content: center; gap: 8px;
       padding: 10px 12px; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.14);
@@ -108,95 +109,69 @@
     .btn:active { transform: translateY(0); filter: brightness(0.98); }
     .favicon { width: 16px; height: 16px; border-radius: 4px; background: rgba(255,255,255,0.25); overflow: hidden; }
 
-    /* Expand Chatbot button - standout style and spacing */
-    .expand-bar {
-      margin-top: 28px; /* extra spacing above */
-      display: flex; justify-content: center;
-    }
+    .expand-bar { margin-top: 28px; display: flex; justify-content: center; }
     .expand-btn {
       padding: 12px 18px;
       border-radius: 14px;
       border: 1px solid color-mix(in oklab, var(--accent) 70%, white 30%);
       background: linear-gradient(180deg, color-mix(in oklab, var(--accent) 38%, transparent 62%), rgba(0,0,0,0.12));
-      color: #eef1ff;
-      font-weight: 800;
-      letter-spacing: 0.3px;
-      cursor: pointer;
+      color: #eef1ff; font-weight: 800; letter-spacing: 0.3px; cursor: pointer;
       box-shadow: 0 6px 18px rgba(139, 92, 246, 0.35), inset 0 0 0 1px rgba(255,255,255,0.05);
-      transition: transform 0.08s ease, filter 0.2s ease, box-shadow 0.2s ease;
-      text-transform: uppercase;
+      transition: transform 0.08s ease, filter 0.2s ease, box-shadow 0.2s ease; text-transform: uppercase;
     }
     .expand-btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
     .expand-btn:active { transform: translateY(0); filter: brightness(0.98); }
 
-    /* Chatbot panel */
     .chat-panel {
       margin-top: 14px;
       border: 1px solid rgba(255,255,255,0.16);
       border-radius: 14px;
       background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.04));
-      overflow: hidden;
-      display: none; /* collapsed by default */
+      overflow: hidden; display: none;
     }
     .chat-header {
       display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between;
       padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.10);
       background: rgba(255,255,255,0.06);
     }
-    .chat-controls {
-      display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
-    }
+    .chat-controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
     .hint { color: var(--muted); font-size: 12px; opacity: 0.95; }
     .select, .chat-input, .small-btn {
       background: rgba(255,255,255,0.10);
       border: 1px solid rgba(255,255,255,0.16);
       color: var(--text);
-      border-radius: 10px;
-      padding: 8px 10px;
-      font-size: 14px;
+      border-radius: 10px; padding: 8px 10px; font-size: 14px;
     }
     .small-btn { cursor: pointer; font-weight: 600; }
     .small-btn.ghost { background: rgba(255,255,255,0.08); }
     .small-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
-    .chat-body {
-      height: min(48vh, 520px);
-      overflow: auto;
-      padding: 12px;
-      display: flex; flex-direction: column; gap: 10px;
-    }
+    .chat-body { height: min(48vh, 520px); overflow: auto; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
     .bubble {
       max-width: 88%;
-      padding: 10px 12px;
-      border-radius: 12px;
-      line-height: 1.45;
-      white-space: pre-wrap;
-      word-wrap: break-word;
-      border: 1px solid rgba(255,255,255,0.12);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+      padding: 10px 12px; border-radius: 12px; line-height: 1.45; white-space: pre-wrap; word-wrap: break-word;
+      border: 1px solid rgba(255,255,255,0.12); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
     }
     .bubble.user { align-self: flex-end; background: var(--user-bubble); }
     .bubble.bot  { align-self: flex-start; background: var(--bot-bubble); }
-
-    .chat-footer {
-      display: grid;
-      grid-template-columns: 1fr auto auto;
-      gap: 8px;
-      padding: 10px 12px;
-      border-top: 1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.06);
-    }
-    .send-btn {
-      padding: 8px 12px;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.16);
-      background: linear-gradient(180deg, rgba(116,179,255,0.18), rgba(116,179,255,0.12));
-      color: var(--text);
-      font-weight: 700;
+    .bubble .md-code { position: relative; padding: 12px; overflow: auto; background: rgba(0,0,0,0.35); border-radius: 10px; }
+    .bubble .md-code .copy-btn {
+      position: absolute; top: 8px; right: 8px; font-size: 12px; padding: 4px 8px;
+      border: 1px solid rgba(255,255,255,0.16); border-radius: 6px; background: rgba(255,255,255,0.08); color: var(--text);
       cursor: pointer;
     }
+    .bubble .md-inline { background: rgba(255,255,255,0.10); padding: 2px 6px; border-radius: 6px; }
 
-    /* Mobile tweaks */
+    .chat-footer {
+      display: grid; grid-template-columns: 1fr auto auto; gap: 8px; padding: 10px 12px;
+      border-top: 1px solid rgba(255,255,255,0.10); background: rgba(255,255,255,0.06);
+    }
+    .send-btn {
+      padding: 8px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.16);
+      background: linear-gradient(180deg, rgba(116,179,255,0.18), rgba(116,179,255,0.12));
+      color: var(--text); font-weight: 700; cursor: pointer;
+    }
+
     @media (max-width: 640px) {
       .wrap { padding: 12px; }
       .card { padding: 14px; border-radius: 14px; }
@@ -206,7 +181,7 @@
       .subtitle { font-size: 12px; }
       .searchbar { padding: 8px 10px; border-radius: 12px; }
       .section { margin-top: 12px; }
-      .engines { grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 6px; }
+      .engines { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 6px; }
       .btn { padding: 9px 10px; font-size: 13px; min-height: 34px; }
       .expand-bar { margin-top: 32px; }
       .chat-body { height: min(50vh, 420px); padding: 10px; gap: 8px; }
@@ -251,12 +226,12 @@
           <div class="chat-controls">
             <select id="modelSelect" class="select" aria-label="Model">
               <option value="openrouter/horizon-beta">openrouter/horizon-beta</option>
-              <option value="qwen/qwen3-coder:free">qwen/qwen3-coder</option>
+              <option value="qwen/qwen3-coder:free">qwen/qwen3-coder:free</option>
               <option value="google/gemini-2.5-pro-exp-03-25">google/gemini-2.5-pro-exp-03-25</option>
-              <option value="google/gemini-2.0-flash-exp:free">google/gemini-2.0-flash-exp</option>
-              <option value="tngtech/deepseek-r1t2-chimera:free">tngtech/deepseek-r1t2-chimera</option>
-              <option value="moonshotai/kimi-dev-72b:free">moonshotai/kimi-dev-72b</option>
-              <option value="z-ai/glm-4.5-air:free">z-ai/glm-4.5-air</option>
+              <option value="google/gemini-2.0-flash-exp:free">google/gemini-2.0-flash-exp:free</option>
+              <option value="tngtech/deepseek-r1t2-chimera:free">tngtech/deepseek-r1t2-chimera:free</option>
+              <option value="moonshotai/kimi-dev-72b:free">moonshotai/kimi-dev-72b:free</option>
+              <option value="z-ai/glm-4.5-air:free">z-ai/glm-4.5-air:free</option>
             </select>
             <button id="insertQueryBtn" class="small-btn ghost" type="button" title="Insert main query">Insert</button>
             <span class="hint">Inserts text from the main search box</span>
@@ -274,7 +249,217 @@
     </main>
   </div>
 
-  <!-- External JS -->
+  <script>
+    // =========================
+    // Engines (with SearchDeen and many others) + alphabetical sorting
+    // =========================
+    const CATEGORIES = [
+      {
+        name: "General",
+        engines: [
+          { name: "Ask", url: "https://www.ask.com/web?q={q}", icon: "https://www.ask.com/favicon.ico" },
+          { name: "Bing", url: "https://www.bing.com/search?q={q}", icon: "https://www.bing.com/sa/simg/favicon-trans-bg-blue-mg.ico" },
+          { name: "Brave", url: "https://search.brave.com/search?q={q}", icon: "https://search.brave.com/favicon.ico" },
+          { name: "DuckDuckGo", url: "https://duckduckgo.com/?q={q}", icon: "https://duckduckgo.com/favicon.ico" },
+          { name: "Ecosia", url: "https://www.ecosia.org/search?q={q}", icon: "https://www.ecosia.org/favicon.ico" },
+          { name: "Google", url: "https://www.google.com/search?q={q}", icon: "https://www.google.com/favicon.ico" },
+          { name: "Metager", url: "https://metager.org/meta/meta.ger3?eingabe={q}", icon: "https://metager.org/favicon.ico" },
+          { name: "Qwant", url: "https://www.qwant.com/?q={q}", icon: "https://www.qwant.com/favicon-32x32.png" },
+          { name: "SearchDeen", url: "https://searchdeen.com/search?q={q}", icon: "https://searchdeen.com/favicon.ico" },
+          { name: "Startpage", url: "https://www.startpage.com/sp/search?query={q}", icon: "https://www.startpage.com/sp/cdn/favicons/favicon--dark.ico" },
+          { name: "Swisscows", url: "https://swisscows.com/web?query={q}", icon: "https://swisscows.com/favicon.ico" },
+          { name: "Yahoo", url: "https://search.yahoo.com/search?p={q}", icon: "https://s.yimg.com/rz/l/favicon.ico" },
+          { name: "YEP", url: "https://yep.com/web?q={q}", icon: "https://yep.com/favicon.ico" },
+          { name: "You.com", url: "https://you.com/search?q={q}", icon: "https://you.com/favicon.ico" }
+        ]
+      },
+      {
+        name: "AI / LLM",
+        engines: [
+          { name: "Perplexity", url: "https://www.perplexity.ai/search?q={q}", icon: "https://www.perplexity.ai/favicon.ico" },
+          { name: "Phind", url: "https://www.phind.com/search?q={q}", icon: "https://www.phind.com/favicon.ico" },
+          { name: "WolframAlpha", url: "https://www.wolframalpha.com/input?i={q}", icon: "https://www.wolframalpha.com/_next/static/images/favicons/favicon-32x32.png" }
+        ]
+      },
+      {
+        name: "Social / Media",
+        engines: [
+          { name: "GitHub", url: "https://github.com/search?q={q}", icon: "https://github.githubassets.com/favicons/favicon.svg" },
+          { name: "LinkedIn", url: "https://www.linkedin.com/search/results/all/?keywords={q}", icon: "https://www.linkedin.com/favicon.ico" },
+          { name: "Reddit", url: "https://www.reddit.com/search/?q={q}", icon: "https://www.redditstatic.com/desktop2x/img/favicon/favicon-32x32.png" },
+          { name: "Threads", url: "https://www.threads.net/search?q={q}", icon: "https://www.threads.net/favicon.ico" },
+          { name: "TikTok", url: "https://www.tiktok.com/search?q={q}", icon: "https://www.tiktok.com/favicon.ico" },
+          { name: "YouTube", url: "https://www.youtube.com/results?search_query={q}", icon: "https://www.youtube.com/favicon.ico" }
+        ]
+      },
+      {
+        name: "Knowledge / Reference",
+        engines: [
+          { name: "Archive.org", url: "https://archive.org/search.php?query={q}", icon: "https://archive.org/images/favicon.ico" },
+          { name: "Openverse", url: "https://openverse.org/search?q={q}", icon: "https://openverse.org/favicon.ico" },
+          { name: "Wikipedia", url: "https://en.wikipedia.org/w/index.php?search={q}", icon: "https://en.wikipedia.org/static/favicon/wikipedia.ico" }
+        ]
+      },
+      {
+        name: "Academic / Research",
+        engines: [
+          { name: "arXiv", url: "https://arxiv.org/search/?query={q}&searchtype=all", icon: "https://arxiv.org/favicon.ico" },
+          { name: "BASE", url: "https://www.base-search.net/Search/Results?lookfor={q}", icon: "https://www.base-search.net/favicon.ico" },
+          { name: "Google Scholar", url: "https://scholar.google.com/scholar?q={q}", icon: "https://scholar.google.com/favicon.ico" },
+          { name: "PubMed", url: "https://pubmed.ncbi.nlm.nih.gov/?term={q}", icon: "https://pubmed.ncbi.nlm.nih.gov/favicon.ico" },
+          { name: "Semantic Scholar", url: "https://www.semanticscholar.org/search?q={q}", icon: "https://www.semanticscholar.org/favicon.ico" }
+        ]
+      },
+      {
+        name: "Developers / Docs",
+        engines: [
+          { name: "DevDocs", url: "https://devdocs.io/#q={q}", icon: "https://devdocs.io/favicon.ico" },
+          { name: "Docker Hub", url: "https://hub.docker.com/search?q={q}&type=image", icon: "https://www.docker.com/wp-content/uploads/2022/03/cropped-favicon-32x32.png" },
+          { name: "Go Packages", url: "https://pkg.go.dev/search?q={q}", icon: "https://pkg.go.dev/static/frontend/img/favicon.ico" },
+          { name: "MDN", url: "https://developer.mozilla.org/en-US/search?q={q}", icon: "https://developer.mozilla.org/favicon-48x48.cbbd161b.png" },
+          { name: "Maven Central", url: "https://search.maven.org/search?q={q}", icon: "https://search.maven.org/assets/images/favicon.ico" },
+          { name: "npm", url: "https://www.npmjs.com/search?q={q}", icon: "https://static.npmjs.com/da3f3f76c3b6f1c07f9f9e4f07a8c12c.png" },
+          { name: "PyPI", url: "https://pypi.org/search/?q={q}", icon: "https://pypi.org/static/images/favicons/favicon.5e3047d30ed9.ico" },
+          { name: "Rust crates", url: "https://crates.io/search?q={q}", icon: "https://crates.io/favicon.ico" },
+          { name: "Sourcegraph", url: "https://sourcegraph.com/search?q={q}", icon: "https://sourcegraph.com/.assets/img/sourcegraph-mark.svg" },
+          { name: "Stack Exchange", url: "https://stackexchange.com/search?q={q}", icon: "https://cdn.sstatic.net/Sites/stackexchange/Img/favicon.ico" },
+          { name: "StackOverflow", url: "https://stackoverflow.com/search?q={q}", icon: "https://stackoverflow.design/assets/img/favicons/favicon.ico" }
+        ]
+      },
+      {
+        name: "Media",
+        engines: [
+          { name: "Giphy", url: "https://giphy.com/search/{q}", icon: "https://giphy.com/static/img/favicon.png" },
+          { name: "IMDb", url: "https://www.imdb.com/find?q={q}", icon: "https://www.imdb.com/favicon.ico" },
+          { name: "Pixabay", url: "https://pixabay.com/images/search/{q}/", icon: "https://pixabay.com/apple-touch-icon.png" },
+          { name: "SoundCloud", url: "https://soundcloud.com/search?q={q}", icon: "https://a-v2.sndcdn.com/assets/images/sc-icons/ios-a62dfc9db5.ico" },
+          { name: "Spotify", url: "https://open.spotify.com/search/{q}", icon: "https://open.spotifycdn.com/cdn/images/favicon.0f31d2ea.ico" }
+        ]
+      },
+      {
+        name: "Shopping",
+        engines: [
+          { name: "AliExpress", url: "https://www.aliexpress.com/wholesale?SearchText={q}", icon: "https://ae01.alicdn.com/images/eng/wholesale/icon/aliexpress.ico" },
+          { name: "Amazon", url: "https://www.amazon.com/s?k={q}", icon: "https://www.amazon.com/favicon.ico" },
+          { name: "eBay", url: "https://www.ebay.com/sch/i.html?_nkw={q}", icon: "https://ir.ebaystatic.com/favicon.ico" },
+          { name: "Google Shopping", url: "https://www.google.com/search?tbm=shop&q={q}", icon: "https://www.google.com/favicon.ico" }
+        ]
+      },
+      {
+        name: "Maps / Places",
+        engines: [
+          { name: "Apple Maps (web)", url: "https://maps.apple.com/?q={q}", icon: "https://apple.com/favicon.ico" },
+          { name: "Google Maps", url: "https://www.google.com/maps/search/{q}", icon: "https://www.google.com/favicon.ico" },
+          { name: "OpenStreetMap", url: "https://www.openstreetmap.org/search?query={q}", icon: "https://www.openstreetmap.org/favicon.ico" }
+        ]
+      },
+      {
+        name: "Islamic Resources",
+        engines: [
+          { name: "Ahadith", url: "https://ahadith.co.uk/searchresults.php?q={q}", icon: "https://ahadith.co.uk/favicon.ico" },
+          { name: "Corpus Quran", url: "https://corpus.quran.com/search.jsp?q={q}", icon: "https://corpus.quran.com/favicon.ico" },
+          { name: "IslamPub", url: "https://islamhouse.com/en/search/?q={q}", icon: "https://islamhouse.com/favicon.ico" },
+          { name: "IslamQnA", url: "https://islamqa.info/en/search?query={q}", icon: "https://islamqa.info/favicon.ico" },
+          { name: "IslamWeb Fatwa", url: "https://www.islamweb.net/en/search?search_word={q}", icon: "https://www.islamweb.net/favicon.ico" },
+          { name: "Quran.com", url: "https://quran.com/search?q={q}", icon: "https://quran.com/favicon.ico" },
+          { name: "SearchDeen", url: "https://searchdeen.com/search?q={q}", icon: "https://searchdeen.com/favicon.ico" },
+          { name: "Sunnah.com", url: "https://sunnah.com/search?q={q}", icon: "https://sunnah.com/favicon.ico" }
+        ]
+      },
+      {
+        name: "Privacy Focused",
+        engines: [
+          { name: "SearXNG (searx.be)", url: "https://searx.be/search?q={q}", icon: "https://searx.be/favicon.ico" },
+          { name: "Whoogle (sdf.org)", url: "https://whoogle.sdf.org/search?q={q}", icon: "https://whoogle.sdf.org/favicon.ico" }
+        ]
+      }
+    ];
+
+    // Sort engines in each category and categories by name
+    CATEGORIES.forEach(cat => cat.engines.sort((a, b) => a.name.localeCompare(b.name)));
+    CATEGORIES.sort((a, b) => a.name.localeCompare(b.name));
+
+    const sectionsEl = document.getElementById("sections");
+    const queryInput = document.getElementById("query");
+    const form = document.getElementById("searchForm");
+
+    function makeEngineButton(engine) {
+      const btn = document.createElement("button");
+      btn.className = "btn";
+      btn.type = "button";
+      btn.setAttribute("data-url", engine.url);
+      btn.setAttribute("aria-label", "Search with " + engine.name);
+
+      const icon = document.createElement("img");
+      icon.className = "favicon";
+      icon.alt = "";
+      icon.referrerPolicy = "no-referrer";
+      icon.loading = "lazy";
+      icon.src = engine.icon || "";
+      btn.appendChild(icon);
+
+      const label = document.createElement("span");
+      label.textContent = engine.name;
+      btn.appendChild(label);
+
+      btn.addEventListener("click", () => openSearch(engine.url));
+      return btn;
+    }
+
+    function renderSections() {
+      sectionsEl.innerHTML = "";
+      CATEGORIES.forEach(cat => {
+        const section = document.createElement("section");
+        section.className = "section";
+
+        const header = document.createElement("div");
+        header.className = "section-header";
+        header.textContent = cat.name;
+        section.appendChild(header);
+
+        const grid = document.createElement("div");
+        grid.className = "engines";
+        cat.engines.forEach(engine => grid.appendChild(makeEngineButton(engine)));
+        section.appendChild(grid);
+
+        sectionsEl.appendChild(section);
+      });
+    }
+
+    function openSearch(urlPattern) {
+      const q = queryInput.value.trim();
+      const encoded = encodeURIComponent(q);
+      const url = urlPattern.replace("{q}", encoded);
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+
+    function getDefaultEngine() {
+      for (const cat of CATEGORIES) {
+        const g = cat.engines.find(e => e.name.toLowerCase() === "google");
+        if (g) return g;
+      }
+      for (const cat of CATEGORIES) if (cat.engines.length) return cat.engines[0];
+      return null;
+    }
+
+    renderSections();
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const def = getDefaultEngine();
+      if (def) openSearch(def.url);
+    });
+
+    queryInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        const def = getDefaultEngine();
+        if (def) openSearch(def.url);
+      }
+    });
+  </script>
+
+  <!-- External JS for chatbot and advanced features -->
   <script src="app.js"></script>
 </body>
 </html>
