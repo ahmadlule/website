@@ -1,69 +1,139 @@
+// TheBestSearchEngine - app.js
+// Features:
+// - Engine launcher (with SearchDeen and many others), sorted
+// - Autocomplete (DuckDuckGo JSONP, client-only)
+// - Chatbot via OpenRouter: streaming, Markdown with copy buttons
+// - Vision image upload for supported models
+// - Speech-to-text (Web Speech API) and text-to-speech (SpeechSynthesis)
+
 // =========================
-// Search engines and UI build
+// Engines (categories) and UI build
 // =========================
 const CATEGORIES = [
   {
-    name: "General",
+    name: "Academic / Research",
     engines: [
-      { name: "Ask",        url: "https://www.ask.com/web?q={q}", icon: "https://www.ask.com/favicon.ico" },
-      { name: "Bing",       url: "https://www.bing.com/search?q={q}", icon: "https://www.bing.com/sa/simg/favicon-trans-bg-blue-mg.ico" },
-      { name: "Brave",      url: "https://search.brave.com/search?q={q}", icon: "https://search.brave.com/favicon.ico" },
-      { name: "DuckDuckGo", url: "https://duckduckgo.com/?q={q}", icon: "https://duckduckgo.com/favicon.ico" },
-      { name: "Google",     url: "https://www.google.com/search?q={q}", icon: "https://www.google.com/favicon.ico" },
-      { name: "Startpage",  url: "https://www.startpage.com/sp/search?query={q}", icon: "https://www.startpage.com/sp/cdn/favicons/favicon--dark.ico" },
-      { name: "Yahoo",      url: "https://search.yahoo.com/search?p={q}", icon: "https://s.yimg.com/rz/l/favicon.ico" },
-      { name: "YEP",        url: "https://yep.com/web?q={q}", icon: "https://yep.com/favicon.ico" },
-      { name: "You.com",    url: "https://you.com/search?q={q}", icon: "https://you.com/favicon.ico" }
+      { name: "arXiv", url: "https://arxiv.org/search/?query={q}&searchtype=all", icon: "https://arxiv.org/favicon.ico" },
+      { name: "BASE", url: "https://www.base-search.net/Search/Results?lookfor={q}", icon: "https://www.base-search.net/favicon.ico" },
+      { name: "Google Scholar", url: "https://scholar.google.com/scholar?q={q}", icon: "https://scholar.google.com/favicon.ico" },
+      { name: "PubMed", url: "https://pubmed.ncbi.nlm.nih.gov/?term={q}", icon: "https://pubmed.ncbi.nlm.nih.gov/favicon.ico" },
+      { name: "Semantic Scholar", url: "https://www.semanticscholar.org/search?q={q}", icon: "https://www.semanticscholar.org/favicon.ico" }
     ]
   },
   {
     name: "AI / LLM",
     engines: [
-      { name: "ChatGPT",    url: "https://chat.openai.com/?q={q}", icon: "https://chat.openai.com/favicon.ico" },
       { name: "Perplexity", url: "https://www.perplexity.ai/search?q={q}", icon: "https://www.perplexity.ai/favicon.ico" },
-      { name: "Phind",      url: "https://www.phind.com/search?q={q}", icon: "https://www.phind.com/favicon.ico" },
+      { name: "Phind", url: "https://www.phind.com/search?q={q}", icon: "https://www.phind.com/favicon.ico" },
       { name: "WolframAlpha", url: "https://www.wolframalpha.com/input?i={q}", icon: "https://www.wolframalpha.com/_next/static/images/favicons/favicon-32x32.png" }
-    ]
-  },
-  {
-    name: "Social / Media",
-    engines: [
-      { name: "GitHub",    url: "https://github.com/search?q={q}", icon: "https://github.githubassets.com/favicons/favicon.svg" },
-      { name: "LinkedIn",  url: "https://www.linkedin.com/search/results/all/?keywords={q}", icon: "https://www.linkedin.com/favicon.ico" },
-      { name: "Reddit",    url: "https://www.reddit.com/search/?q={q}", icon: "https://www.redditstatic.com/desktop2x/img/favicon/favicon-32x32.png" },
-      { name: "Threads",   url: "https://www.threads.net/search?q={q}", icon: "https://www.threads.net/favicon.ico" },
-      { name: "TikTok",    url: "https://www.tiktok.com/search?q={q}", icon: "https://www.tiktok.com/favicon.ico" },
-      { name: "YouTube",   url: "https://www.youtube.com/results?search_query={q}", icon: "https://www.youtube.com/favicon.ico" }
-    ]
-  },
-  {
-    name: "Knowledge / Reference",
-    engines: [
-      { name: "Archive.org",  url: "https://archive.org/search.php?query={q}", icon: "https://archive.org/images/favicon.ico" },
-      { name: "Openverse",    url: "https://openverse.org/search?q={q}", icon: "https://openverse.org/favicon.ico" },
-      { name: "Wikipedia",    url: "https://en.wikipedia.org/w/index.php?search={q}", icon: "https://en.wikipedia.org/static/favicon/wikipedia.ico" }
-    ]
-  },
-  {
-    name: "Islamic Resources",
-    engines: [
-      { name: "Ahadith",     url: "https://ahadith.co.uk/searchresults.php?q={q}", icon: "https://ahadith.co.uk/favicon.ico" },
-      { name: "IslamPub",    url: "https://islamhouse.com/en/search/?q={q}", icon: "https://islamhouse.com/favicon.ico" },
-      { name: "IslamQnA",    url: "https://islamqa.info/en/search?query={q}", icon: "https://islamqa.info/favicon.ico" },
-      { name: "Sunnah.com",  url: "https://sunnah.com/search?q={q}", icon: "https://sunnah.com/favicon.ico" }
     ]
   },
   {
     name: "Developers / Docs",
     engines: [
-      { name: "MDN",            url: "https://developer.mozilla.org/en-US/search?q={q}", icon: "https://developer.mozilla.org/favicon-48x48.cbbd161b.png" },
-      { name: "StackOverflow",  url: "https://stackoverflow.com/search?q={q}", icon: "https://stackoverflow.design/assets/img/favicons/favicon.ico" }
+      { name: "DevDocs", url: "https://devdocs.io/#q={q}", icon: "https://devdocs.io/favicon.ico" },
+      { name: "Docker Hub", url: "https://hub.docker.com/search?q={q}&type=image", icon: "https://www.docker.com/wp-content/uploads/2022/03/cropped-favicon-32x32.png" },
+      { name: "Go Packages", url: "https://pkg.go.dev/search?q={q}", icon: "https://pkg.go.dev/static/frontend/img/favicon.ico" },
+      { name: "MDN", url: "https://developer.mozilla.org/en-US/search?q={q}", icon: "https://developer.mozilla.org/favicon-48x48.cbbd161b.png" },
+      { name: "Maven Central", url: "https://search.maven.org/search?q={q}", icon: "https://search.maven.org/assets/images/favicon.ico" },
+      { name: "npm", url: "https://www.npmjs.com/search?q={q}", icon: "https://static.npmjs.com/da3f3f76c3b6f1c07f9f9e4f07a8c12c.png" },
+      { name: "PyPI", url: "https://pypi.org/search/?q={q}", icon: "https://pypi.org/static/images/favicons/favicon.5e3047d30ed9.ico" },
+      { name: "Rust crates", url: "https://crates.io/search?q={q}", icon: "https://crates.io/favicon.ico" },
+      { name: "Sourcegraph", url: "https://sourcegraph.com/search?q={q}", icon: "https://sourcegraph.com/.assets/img/sourcegraph-mark.svg" },
+      { name: "Stack Exchange", url: "https://stackexchange.com/search?q={q}", icon: "https://cdn.sstatic.net/Sites/stackexchange/Img/favicon.ico" },
+      { name: "StackOverflow", url: "https://stackoverflow.com/search?q={q}", icon: "https://stackoverflow.design/assets/img/favicons/favicon.ico" }
+    ]
+  },
+  {
+    name: "General",
+    engines: [
+      { name: "Ask", url: "https://www.ask.com/web?q={q}", icon: "https://www.ask.com/favicon.ico" },
+      { name: "Bing", url: "https://www.bing.com/search?q={q}", icon: "https://www.bing.com/sa/simg/favicon-trans-bg-blue-mg.ico" },
+      { name: "Brave", url: "https://search.brave.com/search?q={q}", icon: "https://search.brave.com/favicon.ico" },
+      { name: "DuckDuckGo", url: "https://duckduckgo.com/?q={q}", icon: "https://duckduckgo.com/favicon.ico" },
+      { name: "Ecosia", url: "https://www.ecosia.org/search?q={q}", icon: "https://www.ecosia.org/favicon.ico" },
+      { name: "Google", url: "https://www.google.com/search?q={q}", icon: "https://www.google.com/favicon.ico" },
+      { name: "Metager", url: "https://metager.org/meta/meta.ger3?eingabe={q}", icon: "https://metager.org/favicon.ico" },
+      { name: "Qwant", url: "https://www.qwant.com/?q={q}", icon: "https://www.qwant.com/favicon-32x32.png" },
+      { name: "SearchDeen", url: "https://searchdeen.com/search?q={q}", icon: "https://searchdeen.com/favicon.ico" },
+      { name: "Startpage", url: "https://www.startpage.com/sp/search?query={q}", icon: "https://www.startpage.com/sp/cdn/favicons/favicon--dark.ico" },
+      { name: "Swisscows", url: "https://swisscows.com/web?query={q}", icon: "https://swisscows.com/favicon.ico" },
+      { name: "Yahoo", url: "https://search.yahoo.com/search?p={q}", icon: "https://s.yimg.com/rz/l/favicon.ico" },
+      { name: "YEP", url: "https://yep.com/web?q={q}", icon: "https://yep.com/favicon.ico" },
+      { name: "You.com", url: "https://you.com/search?q={q}", icon: "https://you.com/favicon.ico" }
+    ]
+  },
+  {
+    name: "Islamic Resources",
+    engines: [
+      { name: "Ahadith", url: "https://ahadith.co.uk/searchresults.php?q={q}", icon: "https://ahadith.co.uk/favicon.ico" },
+      { name: "Corpus Quran", url: "https://corpus.quran.com/search.jsp?q={q}", icon: "https://corpus.quran.com/favicon.ico" },
+      { name: "IslamPub", url: "https://islamhouse.com/en/search/?q={q}", icon: "https://islamhouse.com/favicon.ico" },
+      { name: "IslamQnA", url: "https://islamqa.info/en/search?query={q}", icon: "https://islamqa.info/favicon.ico" },
+      { name: "IslamWeb Fatwa", url: "https://www.islamweb.net/en/search?search_word={q}", icon: "https://www.islamweb.net/favicon.ico" },
+      { name: "Quran.com", url: "https://quran.com/search?q={q}", icon: "https://quran.com/favicon.ico" },
+      { name: "SearchDeen", url: "https://searchdeen.com/search?q={q}", icon: "https://searchdeen.com/favicon.ico" },
+      { name: "Sunnah.com", url: "https://sunnah.com/search?q={q}", icon: "https://sunnah.com/favicon.ico" }
+    ]
+  },
+  {
+    name: "Maps / Places",
+    engines: [
+      { name: "Apple Maps (web)", url: "https://maps.apple.com/?q={q}", icon: "https://apple.com/favicon.ico" },
+      { name: "Google Maps", url: "https://www.google.com/maps/search/{q}", icon: "https://www.google.com/favicon.ico" },
+      { name: "OpenStreetMap", url: "https://www.openstreetmap.org/search?query={q}", icon: "https://www.openstreetmap.org/favicon.ico" }
+    ]
+  },
+  {
+    name: "Media",
+    engines: [
+      { name: "Giphy", url: "https://giphy.com/search/{q}", icon: "https://giphy.com/static/img/favicon.png" },
+      { name: "IMDb", url: "https://www.imdb.com/find?q={q}", icon: "https://www.imdb.com/favicon.ico" },
+      { name: "Pixabay", url: "https://pixabay.com/images/search/{q}/", icon: "https://pixabay.com/apple-touch-icon.png" },
+      { name: "SoundCloud", url: "https://soundcloud.com/search?q={q}", icon: "https://a-v2.sndcdn.com/assets/images/sc-icons/ios-a62dfc9db5.ico" },
+      { name: "Spotify", url: "https://open.spotify.com/search/{q}", icon: "https://open.spotifycdn.com/cdn/images/favicon.0f31d2ea.ico" }
+    ]
+  },
+  {
+    name: "Privacy Focused",
+    engines: [
+      { name: "SearXNG (searx.be)", url: "https://searx.be/search?q={q}", icon: "https://searx.be/favicon.ico" },
+      { name: "Whoogle (sdf.org)", url: "https://whoogle.sdf.org/search?q={q}", icon: "https://whoogle.sdf.org/favicon.ico" }
+    ]
+  },
+  {
+    name: "Shopping",
+    engines: [
+      { name: "AliExpress", url: "https://www.aliexpress.com/wholesale?SearchText={q}", icon: "https://ae01.alicdn.com/images/eng/wholesale/icon/aliexpress.ico" },
+      { name: "Amazon", url: "https://www.amazon.com/s?k={q}", icon: "https://www.amazon.com/favicon.ico" },
+      { name: "eBay", url: "https://www.ebay.com/sch/i.html?_nkw={q}", icon: "https://ir.ebaystatic.com/favicon.ico" },
+      { name: "Google Shopping", url: "https://www.google.com/search?tbm=shop&q={q}", icon: "https://www.google.com/favicon.ico" }
+    ]
+  },
+  {
+    name: "Social / Media",
+    engines: [
+      { name: "GitHub", url: "https://github.com/search?q={q}", icon: "https://github.githubassets.com/favicons/favicon.svg" },
+      { name: "LinkedIn", url: "https://www.linkedin.com/search/results/all/?keywords={q}", icon: "https://www.linkedin.com/favicon.ico" },
+      { name: "Reddit", url: "https://www.reddit.com/search/?q={q}", icon: "https://www.redditstatic.com/desktop2x/img/favicon/favicon-32x32.png" },
+      { name: "Threads", url: "https://www.threads.net/search?q={q}", icon: "https://www.threads.net/favicon.ico" },
+      { name: "TikTok", url: "https://www.tiktok.com/search?q={q}", icon: "https://www.tiktok.com/favicon.ico" },
+      { name: "YouTube", url: "https://www.youtube.com/results?search_query={q}", icon: "https://www.youtube.com/favicon.ico" }
+    ]
+  },
+  {
+    name: "Knowledge / Reference",
+    engines: [
+      { name: "Archive.org", url: "https://archive.org/search.php?query={q}", icon: "https://archive.org/images/favicon.ico" },
+      { name: "Openverse", url: "https://openverse.org/search?q={q}", icon: "https://openverse.org/favicon.ico" },
+      { name: "Wikipedia", url: "https://en.wikipedia.org/w/index.php?search={q}", icon: "https://en.wikipedia.org/static/favicon/wikipedia.ico" }
     ]
   }
 ];
 
-// Sort engines alphabetically
+// Sort engines and categories alphabetically
 CATEGORIES.forEach(cat => cat.engines.sort((a, b) => a.name.localeCompare(b.name)));
+CATEGORIES.sort((a, b) => a.name.localeCompare(b.name));
 
 const sectionsEl = document.getElementById("sections");
 const queryInput = document.getElementById("query");
@@ -145,7 +215,7 @@ queryInput.addEventListener("keydown", (e) => {
 });
 
 // =========================
-// Autocomplete (no backend) via DuckDuckGo JSONP
+// Autocomplete (DuckDuckGo JSONP, no backend)
 // =========================
 let acTimer = null;
 let acDropdown = null;
@@ -209,7 +279,6 @@ function showDropdown(items) {
 }
 
 function fetchAutocomplete(q) {
-  // DuckDuckGo suggestions JSONP
   const cb = "ddgCallback_" + Math.random().toString(36).slice(2);
   const script = document.createElement("script");
   const url = `https://duckduckgo.com/ac/?q=${encodeURIComponent(q)}&type=list&callback=${cb}`;
@@ -253,25 +322,18 @@ const encodedKey = "c2stb3ItdjEtMzA3NzViOTNhZGY5NGUzMTc2NmM0OTEwZTcxMTBiMWMxMmM1
 const OPENROUTER_API_KEY = atob(encodedKey);
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 
-// Supported model IDs in the select should match these
+// Model mapping (ensure your select uses these values)
 const MODEL_ALIASES = {
-  "horizon-beta": "openrouter/horizon-beta",
   "openrouter/horizon-beta": "openrouter/horizon-beta",
-  "qwen3-coder:free": "qwen/qwen3-coder:free",
   "qwen/qwen3-coder:free": "qwen/qwen3-coder:free",
-  "gemini-2.5-pro-exp-03-25": "google/gemini-2.5-pro-exp-03-25",
   "google/gemini-2.5-pro-exp-03-25": "google/gemini-2.5-pro-exp-03-25",
-  "gemini-2.0-flash-exp:free": "google/gemini-2.0-flash-exp:free",
   "google/gemini-2.0-flash-exp:free": "google/gemini-2.0-flash-exp:free",
-  "deepseek-r1t2-chimera:free": "tngtech/deepseek-r1t2-chimera:free",
   "tngtech/deepseek-r1t2-chimera:free": "tngtech/deepseek-r1t2-chimera:free",
-  "kimi-dev-72b:free": "moonshotai/kimi-dev-72b:free",
   "moonshotai/kimi-dev-72b:free": "moonshotai/kimi-dev-72b:free",
-  "glm-4.5-air:free": "z-ai/glm-4.5-air:free",
   "z-ai/glm-4.5-air:free": "z-ai/glm-4.5-air:free"
 };
 
-// Models that accept images
+// Vision-capable models
 const VISION_MODELS = new Set([
   "openrouter/horizon-beta",
   "google/gemini-2.5-pro-exp-03-25",
@@ -287,7 +349,6 @@ const clearBtn = document.getElementById("clearBtn");
 const insertQueryBtn = document.getElementById("insertQueryBtn");
 const modelSelect = document.getElementById("modelSelect");
 
-// Add extra UI for chat features dynamically (file input, controls)
 function ensureChatEnhancementsUI() {
   if (document.getElementById("chatExtras")) return;
   const footer = chatPanel.querySelector(".chat-footer");
@@ -407,9 +468,6 @@ function ensureChatEnhancementsUI() {
     utter.rate = 1.0;
     utter.pitch = 1.0;
     utter.volume = 1.0;
-    // Choose a voice if needed:
-    // const enVoice = speechSynthesis.getVoices().find(v => v.lang.startsWith("en"));
-    // if (enVoice) utter.voice = enVoice;
     speechSynthesis.speak(utter);
   });
 }
@@ -435,7 +493,9 @@ clearBtn.addEventListener("click", () => {
   chatBody.innerHTML = "";
 });
 
-// Markdown renderer (lightweight)
+// =========================
+// Markdown renderer (lightweight) with copy buttons
+// =========================
 function escapeHtml(s) {
   return s.replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
 }
@@ -482,6 +542,8 @@ function addBubble(role, text, isMarkdown = false) {
     div.innerHTML = renderMarkdown(text);
     // copy buttons
     div.querySelectorAll(".copy-btn").forEach(btn => {
+      if (btn._bound) return;
+      btn._bound = true;
       btn.addEventListener("click", () => {
         const code = btn.previousElementSibling?.textContent || "";
         navigator.clipboard.writeText(code).then(() => {
@@ -506,7 +568,7 @@ chatInput.addEventListener("keydown", (e) => {
 });
 sendBtn.addEventListener("click", sendMessage);
 
-const history = []; // chat history
+const history = [];
 let currentSSEController = null;
 
 function getSelectedModelId() {
@@ -527,30 +589,23 @@ async function sendMessage() {
   const model = getSelectedModelId();
   if (!content && !hasFile) return;
 
-  // User bubble shows text + image name if any
   const partsDesc = [content];
   if (hasFile) partsDesc.push(`[Image: ${fileInput.files[0].name}]`);
   addBubble("user", partsDesc.filter(Boolean).join("\n"));
 
-  // Build message parts for vision
   const userMessageParts = [];
   if (content) userMessageParts.push({ type: "text", text: content });
   if (hasFile && VISION_MODELS.has(model)) {
     const { b64, mime } = await fileToBase64(fileInput.files[0]);
-    userMessageParts.push({
-      type: "input_image",
-      image_data: b64,
-      mime_type: mime
-    });
+    userMessageParts.push({ type: "input_image", image_data: b64, mime_type: mime });
   } else if (hasFile && !VISION_MODELS.has(model)) {
     addBubble("bot", "Note: The selected model is not vision-capable. Image ignored.");
   }
-  // Clear file chip
+
   const chip = document.getElementById("imageChip");
   if (chip) { chip.textContent = ""; chip.style.display = "none"; }
   if (fileInput) fileInput.value = "";
 
-  // Push to history
   const userMsg = userMessageParts.length > 1
     ? { role: "user", content: userMessageParts }
     : { role: "user", content: (content || "") };
@@ -558,7 +613,6 @@ async function sendMessage() {
   chatInput.value = "";
   setSendingState(true);
 
-  // Streaming response bubble
   const botDiv = addBubble("bot", "", true);
 
   try {
@@ -582,9 +636,7 @@ function setSendingState(sending) {
   chatInput.disabled = sending;
   modelSelect.disabled = sending;
   sendBtn.textContent = sending ? "Sending..." : "Send";
-  if (!sending && currentSSEController) {
-    currentSSEController = null;
-  }
+  if (!sending && currentSSEController) currentSSEController = null;
 }
 
 // SSE streaming via fetch ReadableStream
@@ -619,7 +671,6 @@ async function streamChat(payload, botDiv) {
     const { done, value } = await reader.read();
     if (done) break;
     const chunk = decoder.decode(value, { stream: true });
-    // SSE format: lines starting with "data: ..."
     const lines = chunk.split(/\r?\n/);
     for (const line of lines) {
       if (!line.startsWith("data:")) continue;
@@ -631,7 +682,6 @@ async function streamChat(payload, botDiv) {
         if (typeof delta === "string") {
           mdText += delta;
           botDiv.innerHTML = renderMarkdown(mdText);
-          // Re-bind copy buttons after re-render
           botDiv.querySelectorAll(".copy-btn").forEach(btn => {
             if (btn._bound) return;
             btn._bound = true;
@@ -649,7 +699,6 @@ async function streamChat(payload, botDiv) {
     }
   }
 
-  // Save to history
   if (mdText) {
     history.push({ role: "assistant", content: mdText });
   } else {
