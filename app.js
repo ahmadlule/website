@@ -318,7 +318,7 @@ document.addEventListener("click", (e) => {
 // =========================
 
 // IMPORTANT: Client-side keys are public. Prefer a proxy.
-const encodedKey = "c2stb3ItdjEtMzA3NzViOTNhZGY5NGUzMTc2NmM0OTEwZTcxMTBiMWMxMmM1MTFlMzNiNzFiOTNjNjk2M2E0NjA2YmU1ZjQyNQ==" 
+const encodedKey = "c2stb3ItdjEtMzA3NzViOTNhZGY5NGUzMTc2NmM0OTEwZTcxMTBiMWMxMmM1MTFlMzNiNzFiOTNjNjk2M2E0NjA2YmU1ZjQyNQ=="
 const OPENROUTER_API_KEY = atob(encodedKey);
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 
