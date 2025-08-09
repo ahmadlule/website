@@ -3,61 +3,94 @@
 // =========================
 const CATEGORIES = [
   {
-    name: "General",
+    name: "General Search Engines",
     engines: [
-      { name: "Ask",        url: "https://www.ask.com/web?q={q}", icon: "https://www.ask.com/favicon.ico" },
-      { name: "Bing",       url: "https://www.bing.com/search?q={q}", icon: "https://www.bing.com/sa/simg/favicon-trans-bg-blue-mg.ico" },
-      { name: "Brave",      url: "https://search.brave.com/search?q={q}", icon: "https://search.brave.com/favicon.ico" },
+      { name: "Ask", url: "https://www.ask.com/web?q={q}", icon: "https://www.ask.com/favicon.ico" },
+      { name: "Bing", url: "https://www.bing.com/search?q={q}", icon: "https://www.bing.com/sa/simg/favicon-trans-bg-blue-mg.ico" },
+      { name: "Brave", url: "https://search.brave.com/search?q={q}", icon: "https://search.brave.com/favicon.ico" },
       { name: "DuckDuckGo", url: "https://duckduckgo.com/?q={q}", icon: "https://duckduckgo.com/favicon.ico" },
-      { name: "Google",     url: "https://www.google.com/search?q={q}", icon: "https://www.google.com/favicon.ico" },
-      { name: "Startpage",  url: "https://www.startpage.com/sp/search?query={q}", icon: "https://www.startpage.com/sp/cdn/favicons/favicon--dark.ico" },
-      { name: "Yahoo",      url: "https://search.yahoo.com/search?p={q}", icon: "https://s.yimg.com/rz/l/favicon.ico" },
-      { name: "YEP",        url: "https://yep.com/web?q={q}", icon: "https://yep.com/favicon.ico" },
-      { name: "You.com",    url: "https://you.com/search?q={q}", icon: "https://you.com/favicon.ico" }
+      { name: "Google", url: "https://www.google.com/search?q={q}", icon: "https://www.google.com/favicon.ico" },
+      { name: "Startpage", url: "https://www.startpage.com/sp/search?query={q}", icon: "https://www.startpage.com/sp/cdn/favicons/favicon--dark.ico" },
+      { name: "Yahoo", url: "https://search.yahoo.com/search?p={q}", icon: "https://s.yimg.com/rz/l/favicon.ico" },
+      { name: "YEP", url: "https://yep.com/web?q={q}", icon: "https://yep.com/favicon.ico" },
+      { name: "SearXNG instances", url: "https://searx.be/search?q={q}", icon: "https://searx.be/favicon.ico" },
     ]
   },
   {
-    name: "AI / LLM",
+    name: "AI & Semantic Search Tools",
     engines: [
-      { name: "ChatGPT",    url: "https://chat.openai.com/?q={q}", icon: "https://chat.openai.com/favicon.ico" },
+      { name: "ChatGPT", url: "https://chat.openai.com/?q={q}", icon: "https://chat.openai.com/favicon.ico" },
       { name: "Perplexity", url: "https://www.perplexity.ai/search?q={q}", icon: "https://www.perplexity.ai/favicon.ico" },
-      { name: "Phind",      url: "https://www.phind.com/search?q={q}", icon: "https://www.phind.com/favicon.ico" },
-      { name: "WolframAlpha", url: "https://www.wolframalpha.com/input?i={q}", icon: "https://www.wolframalpha.com/_next/static/images/favicons/favicon-32x32.png" }
+      { name: "Phind", url: "https://www.phind.com/search?q={q}", icon: "https://www.phind.com/favicon.ico" },
+      { name: "WolframAlpha", url: "https://www.wolframalpha.com/input?i={q}", icon: "https://www.wolframalpha.com/_next/static/images/favicons/favicon-32x32.png" },
     ]
   },
   {
-    name: "Social / Media",
+    name: "Academic & Research Databases",
     engines: [
-      { name: "GitHub",    url: "https://github.com/search?q={q}", icon: "https://github.githubassets.com/favicons/favicon.svg" },
-      { name: "LinkedIn",  url: "https://www.linkedin.com/search/results/all/?keywords={q}", icon: "https://www.linkedin.com/favicon.ico" },
-      { name: "Reddit",    url: "https://www.reddit.com/search/?q={q}", icon: "https://www.redditstatic.com/desktop2x/img/favicon/favicon-32x32.png" },
-      { name: "Threads",   url: "https://www.threads.net/search?q={q}", icon: "https://www.threads.net/favicon.ico" },
-      { name: "TikTok",    url: "https://www.tiktok.com/search?q={q}", icon: "https://www.tiktok.com/favicon.ico" },
-      { name: "YouTube",   url: "https://www.youtube.com/results?search_query={q}", icon: "https://www.youtube.com/favicon.ico" }
-    ]
-  },
-  {
-    name: "Knowledge / Reference",
-    engines: [
-      { name: "Archive.org",  url: "https://archive.org/search.php?query={q}", icon: "https://archive.org/images/favicon.ico" },
-      { name: "Openverse",    url: "https://openverse.org/search?q={q}", icon: "https://openverse.org/favicon.ico" },
-      { name: "Wikipedia",    url: "https://en.wikipedia.org/w/index.php?search={q}", icon: "https://en.wikipedia.org/static/favicon/wikipedia.ico" }
+      { name: "arXiv", url: "https://arxiv.org/search/?query={q}&searchtype=all", icon: "https://arxiv.org/favicon.ico" },
+      { name: "BASE", url: "https://www.base-search.net/Search/Results?lookfor={q}", icon: "https://www.base-search.net/favicon.ico" },
+      { name: "Google Scholar", url: "https://scholar.google.com/scholar?q={q}", icon: "https://scholar.google.com/favicon.ico" },
+      { name: "PubMed", url: "https://pubmed.ncbi.nlm.nih.gov/?term={q}", icon: "https://pubmed.ncbi.nlm.nih.gov/favicon.ico" },
+      { name: "Semantic Scholar", url: "https://www.semanticscholar.org/search?q={q}", icon: "https://www.semanticscholar.org/favicon.ico" },
+      { name: "Wikipedia", url: "https://en.wikipedia.org/w/index.php?search={q}", icon: "https://en.wikipedia.org/static/favicon/wikipedia.ico" },
+      { name: "Archive.org", url: "https://archive.org/search.php?query={q}", icon: "https://archive.org/images/favicon.ico" },
     ]
   },
   {
     name: "Islamic Resources",
     engines: [
-      { name: "Ahadith",     url: "https://ahadith.co.uk/searchresults.php?q={q}", icon: "https://ahadith.co.uk/favicon.ico" },
-      { name: "IslamPub",    url: "https://islamhouse.com/en/search/?q={q}", icon: "https://islamhouse.com/favicon.ico" },
-      { name: "IslamQnA",    url: "https://islamqa.info/en/search?query={q}", icon: "https://islamqa.info/favicon.ico" },
-      { name: "Sunnah.com",  url: "https://sunnah.com/search?q={q}", icon: "https://sunnah.com/favicon.ico" }
+      { name: "Ahadith", url: "https://ahadith.co.uk/searchresults.php?q={q}", icon: "https://ahadith.co.uk/favicon.ico" },
+      { name: "Corpus Quran", url: "https://corpus.quran.com/search.jsp?q={q}", icon: "https://corpus.quran.com/favicon.ico" },
+      { name: "IslamPub", url: "https://islamhouse.com/en/search/?q={q}", icon: "https://islamhouse.com/favicon.ico" },
+      { name: "IslamQnA", url: "https://islamqa.info/en/search?query={q}", icon: "https://islamqa.info/favicon.ico" },
+      { name: "Quran.com", url: "https://quran.com/search?q={q}", icon: "https://quran.com/favicon.ico" },
+      { name: "Sunnah.com", url: "https://sunnah.com/search?q={q}", icon: "https://sunnah.com/favicon.ico" },
     ]
   },
   {
-    name: "Developers / Docs",
+    name: "Developer & Programming Resources",
     engines: [
-      { name: "MDN",            url: "https://developer.mozilla.org/en-US/search?q={q}", icon: "https://developer.mozilla.org/favicon-48x48.cbbd161b.png" },
-      { name: "StackOverflow",  url: "https://stackoverflow.com/search?q={q}", icon: "https://stackoverflow.design/assets/img/favicons/favicon.ico" }
+      { name: "Docker Hub", url: "https://hub.docker.com/search?q={q}&type=image", icon: "https://hub.docker.com/static/favicon.ico" },
+      { name: "GitHub", url: "https://github.com/search?q={q}", icon: "https://github.githubassets.com/favicons/favicon.svg" },
+      { name: "Go pkg", url: "https://pkg.go.dev/search?q={q}", icon: "https://pkg.go.dev/favicon.ico" },
+      { name: "Maven Central", url: "https://search.maven.org/search?q={q}", icon: "https://search.maven.org/favicon.ico" },
+      { name: "MDN", url: "https://developer.mozilla.org/en-US/search?q={q}", icon: "https://developer.mozilla.org/favicon-48x48.cbbd161b.png" },
+      { name: "npm", url: "https://www.npmjs.com/search?q={q}", icon: "https://www.npmjs.com/static/images/touch-icons/favicon-32x32.png" },
+      { name: "PyPI", url: "https://pypi.org/search/?q={q}", icon: "https://pypi.org/static/images/favicon.6a76275d.ico" },
+      { name: "Rust crates", url: "https://crates.io/search?q={q}", icon: "https://crates.io/favicon.ico" },
+      { name: "Stack Exchange", url: "https://stackexchange.com/search?q={q}", icon: "https://stackexchange.com/favicon.ico" },
+      { name: "StackOverflow", url: "https://stackoverflow.com/search?q={q}", icon: "https://stackoverflow.design/assets/img/favicons/favicon.ico" },
+    ]
+  },
+  {
+    name: "Social Media & Community Platforms",
+    engines: [
+      { name: "LinkedIn", url: "https://www.linkedin.com/search/results/all/?keywords={q}", icon: "https://www.linkedin.com/favicon.ico" },
+      { name: "Reddit", url: "https://www.reddit.com/search/?q={q}", icon: "https://www.redditstatic.com/desktop2x/img/favicon/favicon-32x32.png" },
+      { name: "Threads", url: "https://www.threads.net/search?q={q}", icon: "https://www.threads.net/favicon.ico" },
+      { name: "TikTok", url: "https://www.tiktok.com/search?q={q}", icon: "https://www.tiktok.com/favicon.ico" },
+      { name: "YouTube", url: "https://www.youtube.com/results?search_query={q}", icon: "https://www.youtube.com/favicon.ico" },
+    ]
+  },
+  {
+    name: "E-commerce & Shopping",
+    engines: [
+      { name: "AliExpress", url: "https://www.aliexpress.com/wholesale?SearchText={q}", icon: "https://www.aliexpress.com/favicon.ico" },
+      { name: "Amazon", url: "https://www.amazon.com/s?k={q}", icon: "https://www.amazon.com/favicon.ico" },
+      { name: "eBay", url: "https://www.ebay.com/sch/i.html?_nkw={q}", icon: "https://www.ebay.com/favicon.ico" },
+      { name: "Google Shopping", url: "https://www.google.com/search?tbm=shop&q={q}", icon: "https://www.google.com/favicon.ico" },
+    ]
+  },
+  {
+    name: "Media, Entertainment & Creative Content",
+    engines: [
+      { name: "Giphy", url: "https://giphy.com/search/{q}", icon: "https://giphy.com/favicon.ico" },
+      { name: "IMDb", url: "https://www.imdb.com/find?q={q}", icon: "https://www.imdb.com/favicon.ico" },
+      { name: "Openverse", url: "https://openverse.org/search?q={q}", icon: "https://openverse.org/favicon.ico" },
+      { name: "Pixabay", url: "https://pixabay.com/images/search/{q}/", icon: "https://pixabay.com/favicon.ico" },
+      { name: "SoundCloud", url: "https://soundcloud.com/search?q={q}", icon: "https://soundcloud.com/favicon.ico" },
+      { name: "Spotify", url: "https://open.spotify.com/search/{q}", icon: "https://open.spotify.com/favicon.ico" },
     ]
   }
 ];
